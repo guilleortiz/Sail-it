@@ -66,6 +66,7 @@
       const exercisePageTitleElement = document.getElementById('exercise-page-title');
       const topicHeadingElement = document.getElementById('exercise-topic-heading');
       const descriptionElement = document.getElementById('exercise-description');
+      const container = document.getElementById('exercise-content');
 
       function formatTopicName(slug) {
         if (!slug) return "Desconocido";
@@ -75,7 +76,7 @@
           .join(' ');
       }
 
-      if (topicSlug && topicHeadingElement && descriptionElement && exercisePageTitleElement) {
+      if (topicSlug && topicHeadingElement && descriptionElement && exercisePageTitleElement && container) {
         const formattedTopic = formatTopicName(topicSlug);
         exercisePageTitleElement.textContent = `Ejercicio: ${formattedTopic}`;
         topicHeadingElement.textContent = `Ejercicio sobre: ${formattedTopic}`;
@@ -90,33 +91,52 @@
             { name: 'A un largo', pos: 3 },
             { name: 'Por la aleta', pos: 4 }
           ];
-          // Mezclar los nombres para el drag
-          const shuffled = [...rumbos].sort(() => Math.random() - 0.5);
-          const container = document.getElementById('exercise-content');
-          container.innerHTML = `
-            <div class="flex flex-col md:flex-row gap-8">
-              <div class="md:w-1/3 w-full">
-                <h3 class="text-lg font-semibold mb-2">Ejercicio de rumbos según el viento</h3>
-                <p class="mb-4 text-slate-600 text-sm">Arrastra cada nombre de rumbo hasta la posición correcta en el diagrama del velero, según la dirección desde la que sopla el viento.</p>
-                <ul id="rumbos-list" class="space-y-3">
-                  ${shuffled.map((r, i) => `
-                    <li draggable="true" data-rumbo="${r.name}" class="draggable-rumbo cursor-move bg-slate-100 rounded px-4 py-4 shadow hover:bg-sky-100 transition text-lg touch-manipulation">${r.name}</li>`).join('')}
-                </ul>
-              </div>
-              <div class="md:w-2/3 w-full flex justify-center items-center">
-                <div class="relative w-[520px] h-[520px] mx-auto" id="rosa-rumbos">
-                  <svg viewBox="0 0 520 520" width="100%" height="320" style="max-width: 100vw; touch-action: none;">
+          
+          let currentRumboIndex = 0;
+          let correctAnswers = 0;
+          let totalQuestions = rumbos.length;
+
+          function showNextRumbo() {
+            if (currentRumboIndex >= rumbos.length) {
+              // Mostrar pantalla de finalización
+              container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-8 sm:py-16 px-4">
+                  <h2 class="text-xl sm:text-2xl font-bold text-green-700 mb-4">¡Ejercicio completado!</h2>
+                  <p class="text-base sm:text-lg text-slate-700">Respondiste correctamente ${correctAnswers} de ${totalQuestions} rumbos.</p>
+                  <button onclick="location.reload()" class="mt-6 px-4 sm:px-6 py-2 sm:py-3 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors text-sm sm:text-base">
+                    Intentar de nuevo
+                  </button>
+                </div>
+              `;
+              return;
+            }
+
+            const currentRumbo = rumbos[currentRumboIndex];
+            // Mezclar las opciones
+            const options = [...rumbos].sort(() => Math.random() - 0.5);
+
+            container.innerHTML = `
+              <div class="flex flex-col items-center px-4 sm:px-6">
+                <div class="w-full max-w-md mb-4 sm:mb-8">
+                  <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+                    <h3 class="text-xl sm:text-2xl font-semibold text-slate-800 mb-2 text-center">${currentRumbo.name}</h3>
+                    <p class="text-sm sm:text-base text-slate-600 text-center mb-4">Selecciona la posición correcta en el diagrama</p>
+                    <div class="mt-4 text-center text-xs sm:text-sm text-slate-500">
+                      Pregunta ${currentRumboIndex + 1} de ${totalQuestions}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="relative w-full max-w-[320px] sm:max-w-[520px] aspect-square mx-auto" id="rosa-rumbos">
+                  <svg viewBox="0 0 520 520" width="100%" height="100%" style="max-width: 100%; touch-action: none;">
                     <g id="rumbos-zones">
                       ${(() => {
-                        // 5 posiciones, ángulos: -90, -45, 0, 45, 90 (de arriba a abajo, sentido horario)
                         const angles = [-90, -45, 0, 45, 90];
                         return rumbos.map((r, i) => {
                           const angle = angles[i];
                           const rad = angle * Math.PI / 180;
-                          // Centro del velero
                           const cx = 260;
                           const cy = 260;
-                          // Flechas y drop-zones más lejos del centro
                           const x1 = cx + Math.cos(rad) * 90;
                           const y1 = cy + Math.sin(rad) * 90;
                           const x2 = cx + Math.cos(rad) * 210;
@@ -124,7 +144,17 @@
                           return `
                             <g>
                               <line x1="${x2}" y1="${y2}" x2="${x1}" y2="${y1}" stroke="#0ea5e9" stroke-width="2.5" marker-end="url(#arrowhead${i})"/>
-                              <rect class="drop-zone" data-pos="${i}" x="${x2-60}" y="${y2-32}" width="120" height="64" rx="16" fill="#fff" stroke="#0369a1" stroke-width="2"/>
+                              <circle 
+                                class="rumbo-option cursor-pointer hover:fill-sky-100 transition-colors" 
+                                data-pos="${i}" 
+                                cx="${x2}" 
+                                cy="${y2}" 
+                                r="25" 
+                                fill="white" 
+                                stroke="#0369a1" 
+                                stroke-width="2"
+                                onclick="handleRumboSelection(${i})"
+                              />
                             </g>
                           `;
                         }).join('');
@@ -141,146 +171,59 @@
                       `).join('')}
                     </defs>
                   </svg>
-                  <div id="labels-overlay" class="absolute inset-0 pointer-events-none"></div>
                 </div>
-              </div>
-            </div>
-          `;
 
-          // Drag & Drop JS
-          let dragged = null;
-          let draggedText = '';
-          // Drag & Drop para mouse
-          document.querySelectorAll('.draggable-rumbo').forEach(el => {
-            el.addEventListener('dragstart', e => {
-              dragged = el;
-              draggedText = el.getAttribute('data-rumbo');
-              setTimeout(() => el.classList.add('opacity-50'), 0);
+                <div id="feedback" class="mt-4 text-center text-base sm:text-lg font-medium"></div>
+              </div>
+            `;
+
+            // Agregar los event listeners después de crear los elementos
+            document.querySelectorAll('.rumbo-option').forEach(circle => {
+              circle.addEventListener('click', (e) => {
+                const pos = parseInt(circle.getAttribute('data-pos'));
+                handleRumboSelection(pos);
+              });
             });
-            el.addEventListener('dragend', e => {
-              dragged = null;
-              draggedText = '';
-              el.classList.remove('opacity-50');
-            });
-            // Touch events para móviles
-            el.addEventListener('touchstart', e => {
-              dragged = el;
-              draggedText = el.getAttribute('data-rumbo');
-              el.classList.add('opacity-50');
-              e.stopPropagation();
-            });
-            el.addEventListener('touchend', e => {
-              dragged = null;
-              draggedText = '';
-              el.classList.remove('opacity-50');
-              e.stopPropagation();
-            });
-          });
-          document.querySelectorAll('.drop-zone').forEach((zone, idx) => {
-            zone.addEventListener('dragover', e => {
-              e.preventDefault();
-              zone.setAttribute('fill', '#bae6fd');
-            });
-            zone.addEventListener('dragleave', e => {
-              zone.setAttribute('fill', '#fff');
-            });
-            zone.addEventListener('drop', e => {
-              e.preventDefault();
-              zone.setAttribute('fill', '#fff');
-              if (!dragged) return;
-              handleDropRumbo(zone, idx);
-            });
-            // Touch events para móviles
-            zone.addEventListener('touchmove', e => {
-              e.preventDefault();
-              zone.setAttribute('fill', '#bae6fd');
-            });
-            zone.addEventListener('touchend', e => {
-              zone.setAttribute('fill', '#fff');
-              if (!dragged) return;
-              handleDropRumbo(zone, idx);
-            });
-          });
-          function handleDropRumbo(zone, idx) {
-            const correct = rumbos[idx].name === draggedText;
-            // Overlay label
-            const overlay = document.getElementById('labels-overlay');
-            const svgRect = zone.getBoundingClientRect();
-            const parentRect = overlay.parentElement.getBoundingClientRect();
-            const x = svgRect.left - parentRect.left + svgRect.width/2;
-            const y = svgRect.top - parentRect.top + svgRect.height/2;
-            // Remove previous label for this pos
-            overlay.querySelectorAll(`[data-label-pos="${idx}"]`).forEach(n => n.remove());
-            // Add label
-            const label = document.createElement('div');
-            label.textContent = draggedText;
-            label.setAttribute('data-label-pos', idx);
-            label.className = `absolute text-base font-bold px-2 py-2 rounded-lg pointer-events-none shadow`;
-            label.style.left = `${x-60}px`;
-            label.style.top = `${y-32}px`;
-            label.style.width = '120px';
-            label.style.height = '64px';
-            label.style.display = 'flex';
-            label.style.alignItems = 'center';
-            label.style.justifyContent = 'center';
-            label.style.textAlign = 'center';
-            label.style.background = correct ? '#22c55e' : '#ef4444';
-            label.style.color = '#fff';
-            label.style.transition = 'background 0.2s';
-            overlay.appendChild(label);
-            // Efecto shake si es incorrecto
-            if (!correct) {
-              label.animate([
-                { transform: 'translateX(0px)' },
-                { transform: 'translateX(-12px)' },
-                { transform: 'translateX(12px)' },
-                { transform: 'translateX(-12px)' },
-                { transform: 'translateX(12px)' },
-                { transform: 'translateX(0px)' }
-              ], { duration: 400, easing: 'ease' });
-              // Volver el nombre al menú después del shake
-              setTimeout(() => {
-                overlay.removeChild(label);
-                // Si el nombre no está ya en la lista, lo agrego de nuevo
-                if (!document.querySelector(`#rumbos-list li[data-rumbo='${draggedText}']`)) {
-                  const li = document.createElement('li');
-                  li.textContent = draggedText;
-                  li.setAttribute('draggable', 'true');
-                  li.setAttribute('data-rumbo', draggedText);
-                  li.className = 'draggable-rumbo cursor-move bg-slate-100 rounded px-4 py-4 shadow hover:bg-sky-100 transition text-lg touch-manipulation';
-                  document.getElementById('rumbos-list').appendChild(li);
-                  // Reasignar eventos drag y touch
-                  li.addEventListener('dragstart', e => {
-                    dragged = li;
-                    draggedText = li.getAttribute('data-rumbo');
-                    setTimeout(() => li.classList.add('opacity-50'), 0);
-                  });
-                  li.addEventListener('dragend', e => {
-                    dragged = null;
-                    draggedText = '';
-                    li.classList.remove('opacity-50');
-                  });
-                  li.addEventListener('touchstart', e => {
-                    dragged = li;
-                    draggedText = li.getAttribute('data-rumbo');
-                    li.classList.add('opacity-50');
-                    e.stopPropagation();
-                  });
-                  li.addEventListener('touchend', e => {
-                    dragged = null;
-                    draggedText = '';
-                    li.classList.remove('opacity-50');
-                    e.stopPropagation();
-                  });
-                }
-              }, 420);
-            } else {
-              // Si es correcto, deshabilitar el drop para esa zona
-              zone.style.pointerEvents = 'none';
-              dragged.setAttribute('draggable', 'false');
-              dragged.classList.add('line-through', 'opacity-40');
-            }
           }
+
+          function handleRumboSelection(selectedPos) {
+            const correctPos = rumbos[currentRumboIndex].pos;
+            const feedback = document.getElementById('feedback');
+            const circles = document.querySelectorAll('.rumbo-option');
+            
+            circles.forEach(circle => {
+              circle.style.pointerEvents = 'none';
+              if (parseInt(circle.getAttribute('data-pos')) === selectedPos) {
+                if (selectedPos === correctPos) {
+                  circle.setAttribute('fill', '#22c55e');
+                  circle.setAttribute('stroke', '#16a34a');
+                  feedback.textContent = '¡Correcto!';
+                  feedback.className = 'mt-4 text-center text-lg font-medium text-green-600';
+                  correctAnswers++;
+                  setTimeout(() => {
+                    currentRumboIndex++;
+                    showNextRumbo();
+                  }, 1000);
+                } else {
+                  circle.setAttribute('fill', '#ef4444');
+                  circle.setAttribute('stroke', '#dc2626');
+                  feedback.textContent = 'Incorrecto. Intenta de nuevo.';
+                  feedback.className = 'mt-4 text-center text-lg font-medium text-red-600';
+                  // Habilitar los círculos nuevamente después de un momento
+                  setTimeout(() => {
+                    circles.forEach(c => {
+                      c.style.pointerEvents = 'auto';
+                      c.setAttribute('fill', 'white');
+                      c.setAttribute('stroke', '#0369a1');
+                    });
+                    feedback.textContent = '';
+                  }, 1500);
+                }
+              }
+            });
+          }
+
+          showNextRumbo();
         }
 
         // --- Ejercicio de maniobras ---
