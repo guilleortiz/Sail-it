@@ -2,22 +2,38 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Manual de Navegación</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-      display: flex; /* For sticky footer */
-      flex-direction: column; /* For sticky footer */
-      min-height: 100vh; /* For sticky footer */
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
     }
     main {
-      flex-grow: 1; /* For sticky footer */
+      flex-grow: 1;
     }
-    /* Additional style for smooth scrolling if nav links are used for same-page anchors */
     html {
       scroll-behavior: smooth;
+    }
+    /* Improved touch targets for mobile */
+    .mobile-nav-link, 
+    button, 
+    a {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Prevent text size adjustment on orientation change */
+    @media screen and (max-width: 768px) {
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
     }
   </style>
 <link rel="stylesheet" href="/index.css">
@@ -25,24 +41,70 @@
 <body class="bg-slate-50 text-slate-700">
 
   <header class="bg-slate-100 shadow-sm sticky top-0 z-50">
-    <!-- Header content will be injected by JavaScript -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="#inicio" class="flex items-center" aria-label="Sail-it - Página de inicio">
+          ${getSailboatLogoIconSVG()}
+          <span class="ml-2 text-lg sm:text-xl font-bold text-slate-800">Sail-it</span>
+        </a>
+        <nav class="hidden md:flex items-center space-x-4 lg:space-x-6" aria-label="Navegación principal">
+          ${navLinksData.map(link => `
+            <a href="${link.href}" class="text-slate-600 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+              ${link.label}
+            </a>
+          `).join('')}
+        </nav>
+        <div class="md:hidden flex items-center">
+          <button id="mobile-menu-button" type="button" class="text-slate-700 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500 p-2 rounded-md" aria-label="Abrir menú principal" aria-expanded="false" aria-controls="mobile-menu">
+            ${getMenuIconSVG()}
+          </button>
+        </div>
+      </div>
+    </div>
+    <nav id="mobile-menu" class="md:hidden bg-slate-100 hidden" aria-label="Navegación móvil">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        ${navLinksData.map(link => `
+          <a href="${link.href}" class="text-slate-600 hover:text-sky-700 hover:bg-slate-200 block px-3 py-3 rounded-md text-base font-medium transition-colors mobile-nav-link">
+            ${link.label}
+          </a>
+        `).join('')}
+      </div>
+    </nav>
   </header>
 
   <main>
     <div id="hero-section-container">
-      <!-- Hero content will be injected by JavaScript -->
+      <div 
+        id="inicio"
+        class="relative bg-cover bg-center h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[calc(100vh-4rem)] flex items-center"
+        style="background-image: url('assets/sailboat.png');"
+        role="banner"
+      >
+        <div class="absolute inset-0 bg-black opacity-30" aria-hidden="true"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div class="md:w-1/2">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+              Manual de<br />Navegación
+            </h1>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <section id="temas" class="py-12 md:py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="temas-heading">
+    <section id="temas" class="py-8 sm:py-12 md:py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="temas-heading">
       <h2 id="temas-heading" class="sr-only">Temas de Navegación</h2>
-      <div id="info-cards-container" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div id="info-cards-container" class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
         <!-- Info cards will be injected by JavaScript -->
       </div>
     </section>
   </main>
 
-  <footer class="bg-slate-100 border-t border-slate-200">
-    <!-- Footer content will be injected by JavaScript -->
+  <footer class="bg-slate-100 border-t border-slate-200 py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center text-sm text-slate-600">
+        <p>© 2024 Sail-it. Todos los derechos reservados.</p>
+      </div>
+    </div>
   </footer>
 
   <script>
