@@ -1,0 +1,27 @@
+{
+  "name": "Sail-it",
+  "short_name": "Sail-it",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "description": "Manual interactivo de navegación a vela",
+  "icons": [
+    {
+      "src": "assets/sailboat-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    
+    {
+      "src": "assets/sailboat-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/sailboat-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+} 

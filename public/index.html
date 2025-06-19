@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Manual de Navegación</title>
+  <title>Ejercicios de Navegación</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1976d2">
   <style>
     body {
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -84,7 +86,7 @@
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div class="md:w-1/2">
             <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-              Manual de<br />Navegación
+              Ejercicios de<br />Navegación
             </h1>
           </div>
         </div>
@@ -94,7 +96,20 @@
     <section id="temas" class="py-8 sm:py-12 md:py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="temas-heading">
       <h2 id="temas-heading" class="sr-only">Temas de Navegación</h2>
       <div id="info-cards-container" class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-        <!-- Info cards will be injected by JavaScript -->
+        <a href="exercise.html" class="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+          <div class="flex flex-col items-center text-center">
+            ${getWindIconSVG()}
+            <h3 class="text-lg sm:text-xl font-semibold text-slate-800 mb-2">Maniobras</h3>
+            <p class="text-slate-600 text-sm sm:text-base">Aprende sobre las maniobras básicas de navegación y cómo ejecutarlas correctamente.</p>
+          </div>
+        </a>
+        <a href="elementos-barco.html" class="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+          <div class="flex flex-col items-center text-center">
+            ${getSailboatIconSVG()}
+            <h3 class="text-lg sm:text-xl font-semibold text-slate-800 mb-2">Elementos del Barco</h3>
+            <p class="text-slate-600 text-sm sm:text-base">Conoce los diferentes elementos que componen un barco y sus funciones.</p>
+          </div>
+        </a>
       </div>
     </section>
   </main>
@@ -313,7 +328,7 @@
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
               <div class="md:w-1/2">
                 <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight">
-                  Manual de<br />Navegación
+                  Ejercicios de<br />Navegación
                 </h1>
               </div>
             </div>
@@ -322,11 +337,11 @@
       }
       
       const cardDataItems = [
-        { id: '1', iconFn: getRumbosIconSVG, title: 'Rumbos', description: 'Nombre de los rumbos segun el viento.' },
-        { id: '2', iconFn: getSailboatIconSVG, title: 'Maniobras', description: 'Las diferentes maniobras de navegación.' },
-        { id: '3', iconFn: getShipIconSVG, title: 'Características del Buque', description: 'Aprende las características esenciales que debe tener un buque.' },
-        { id: '4', iconFn: getTwinSailboatsIconSVG, title: 'Nudos', description: 'Conocer los nudos de los cabos.' },
-
+        { id: '1', iconFn: getRumbosIconSVG, title: 'Rumbos', description: 'Nombre de los rumbos segun el viento.', href: 'rumbos.html' },
+        { id: '2', iconFn: getSailboatIconSVG, title: 'Maniobras', description: 'Las diferentes maniobras de navegación.', href: 'maniobras.html' },
+        { id: '3', iconFn: getShipIconSVG, title: 'Características del Buque', description: 'Aprende las características esenciales que debe tener un buque.', href: 'caracteristicas-buque.html' },
+        { id: '4', iconFn: getTwinSailboatsIconSVG, title: 'Nudos', description: 'Conocer los nudos de los cabos.', href: 'nudos.html' },
+        { id: '5', iconFn: getSailboatIconSVG, title: 'Elementos del Barco', description: 'Conoce los diferentes elementos que componen un barco y sus funciones.', href: 'elementos-del-barco.html' }
       ];
       const infoCardsContainer = document.getElementById('info-cards-container');
       if (infoCardsContainer) {
@@ -334,7 +349,7 @@
         console.log("Generating info cards. Base URL for exercises: exercise.html");
         cardDataItems.forEach(card => {
           const topicSlug = generateTopicSlug(card.title);
-          const cardHref = `exercise.html?topic=${topicSlug}`;
+          const cardHref = card.href || `exercise.html?topic=${topicSlug}`;
           console.log(`  Card: "${card.title}", Slug: "${topicSlug}", Href: "${cardHref}"`);
           infoCardsHTML += `
             <a href="${cardHref}" 
@@ -394,6 +409,15 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
+  window.addEventListener('load', function() {
+    
+    navigator.serviceWorker.register('/service-worker.js');
+  });
+}
 </script>
 </body>
 </html>
