@@ -53,13 +53,13 @@
     }
     .boat {
       position: absolute;
-      top: -0.5rem;
+      top: -1rem;
       left: 0;
-      width: 3rem;
-      height: 2.5rem;
+      width: 5rem;
+      height: 4rem;
       transition: left 2s ease-in-out;
       transform: translateX(-50%);
-      z-index: 2;
+      z-index: 3;
     }
     .boat svg {
       width: 100%;
@@ -86,11 +86,11 @@
       width: 40px;
       height: 2px;
       background: linear-gradient(to right, 
-        rgba(220, 220, 220, 0) 0%,
-        rgba(220, 220, 220, 0.3) 20%,
-        rgba(220, 220, 220, 0.7) 50%,
-        rgba(220, 220, 220, 0.3) 80%,
-        rgba(220, 220, 220, 0) 100%
+        rgba(147, 197, 253, 0) 0%,
+        rgba(147, 197, 253, 0.3) 20%,
+        rgba(147, 197, 253, 0.7) 50%,
+        rgba(147, 197, 253, 0.3) 80%,
+        rgba(147, 197, 253, 0) 100%
       );
       border-radius: 1px;
       animation: wind 3s linear infinite;
@@ -203,38 +203,331 @@
       html {
         -webkit-text-size-adjust: 100%;
       }
+      
+      main {
+        padding: 0.5rem;
+      }
+      
       #exercise-content {
         padding: 1rem !important;
+        margin: 0.5rem;
+      }
+      
+      .progress-container {
+        height: 1.25rem;
+        margin: 1rem 0;
+      }
+      
+      .boat {
+        width: 4rem;
+        height: 3rem;
+        top: -0.75rem;
+      }
+      
+      .question {
+        margin: 1rem 0;
+        padding: 1rem;
+      }
+      
+      .question p {
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+      
+      .options {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+      }
+      
+      .option {
+        padding: 1rem 0.75rem;
+        font-size: 1rem;
+        min-height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      
+      .feedback {
+        margin-top: 0.75rem;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+      }
+      
+      .feedback.correct h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .feedback.correct p {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .feedback.correct button {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
       }
     }
-    @media (min-width: 768px) {
+    @media screen and (max-width: 480px) {
       main {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+        padding: 0.25rem;
       }
+      
+      #exercise-content {
+        padding: 0.75rem !important;
+        margin: 0.25rem;
+      }
+      
+      .progress-container {
+        height: 1rem;
+        margin: 0.75rem 0;
+      }
+      
+      .boat {
+        width: 4rem;
+        height: 3rem;
+      }
+      
+      .question {
+        margin: 0.75rem 0;
+        padding: 0.75rem;
+      }
+      
+      .question p {
+        font-size: 0.9rem;
+      }
+      
+      .option {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+        min-height: 2.5rem;
+      }
+      
+      .feedback {
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        font-size: 0.85rem;
+      }
+      
+      .feedback.correct h2 {
+        font-size: 1.25rem;
+      }
+      
+      .feedback.correct p {
+        font-size: 0.9rem;
+      }
+    }
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+      main {
+        padding: 1rem;
+      }
+      
+      #exercise-content {
+        padding: 1.5rem !important;
+      }
+      
+      .question {
+        margin: 1.25rem 0;
+        padding: 1.25rem;
+      }
+      
+      .options {
+        gap: 1rem;
+      }
+      
+      .option {
+        padding: 1rem 1.25rem;
+        font-size: 1.1rem;
+      }
+    }
+    @media screen and (min-width: 1025px) {
+      main {
+        padding: 2rem;
+      }
+      
       #exercise-content {
         padding: 2rem !important;
+      }
+      
+      .question {
+        margin: 2rem 0;
+        padding: 2rem;
+      }
+      
+      .options {
+        gap: 1.5rem;
+      }
+      
+      .option {
+        padding: 1.25rem 1.5rem;
+        font-size: 1.2rem;
+      }
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .option {
+        min-height: 3.5rem;
+        padding: 1rem;
+        font-size: 1.1rem;
+      }
+      
+      .option:hover {
+        background-color: white;
+        border-color: #e2e8f0;
+      }
+      
+      .option:active {
+        background-color: #f8fafc;
+        border-color: #94a3b8;
+        transform: scale(0.98);
+      }
+      
+      button, a {
+        min-height: 48px;
+        min-width: 48px;
+      }
+    }
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+      main {
+        padding: 0.5rem;
+      }
+      
+      #exercise-content {
+        padding: 0.75rem !important;
+      }
+      
+      .progress-container {
+        height: 1rem;
+        margin: 0.5rem 0;
+      }
+      
+      .question {
+        margin: 0.5rem 0;
+        padding: 0.75rem;
+      }
+      
+      .options {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+      }
+      
+      .option {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        min-height: 2.5rem;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .boat {
+        transition: left 1s ease-in-out;
+      }
+      
+      .progress-bar {
+        transition: width 1s ease-in-out;
+      }
+      
+      .option {
+        transition: none;
+      }
+      
+      .wind-particle {
+        animation: none;
+      }
+    }
+
+    /* Responsividad del header y footer */
+    @media screen and (max-width: 768px) {
+      header {
+        padding: 0.5rem 0;
+      }
+      
+      header h1 {
+        font-size: 1.1rem !important;
+      }
+      
+      header a {
+        font-size: 0.85rem !important;
+        padding: 0.5rem 0.75rem !important;
+      }
+      
+      footer {
+        padding: 1rem 0;
+      }
+      
+      footer p {
+        font-size: 0.75rem;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      header {
+        padding: 0.25rem 0;
+      }
+      
+      header h1 {
+        font-size: 1rem !important;
+      }
+      
+      header a {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.6rem !important;
+        width: auto !important;
+      }
+      
+      footer {
+        padding: 0.75rem 0;
+      }
+      
+      footer p {
+        font-size: 0.7rem;
+      }
+    }
+
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+      header {
+        padding: 0.25rem 0;
+      }
+      
+      header h1 {
+        font-size: 1rem !important;
+      }
+      
+      header a {
+        font-size: 0.8rem !important;
+        padding: 0.3rem 0.5rem !important;
+      }
+      
+      main {
+        padding: 0.25rem;
+      }
+      
+      #exercise-content {
+        padding: 0.5rem !important;
       }
     }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-700">
   <header class="bg-sky-700 shadow-sm">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
-      <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-white">Elementos del Barco</h1>
-      <a href="index.html" class="w-full sm:w-auto text-sm sm:text-base text-white hover:text-sky-100 font-medium px-3 py-2 sm:px-4 sm:py-2 rounded-md border border-white hover:bg-sky-600 transition-colors text-center">&larr; Volver al Manual</a>
+    <div class="max-w-4xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-3 md:py-4 flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-2 md:gap-0">
+      <h1 class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white text-center sm:text-left">Elementos del Barco</h1>
+      <a href="index.html" class="w-full sm:w-auto text-xs sm:text-sm md:text-base text-white hover:text-sky-100 font-medium px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2 rounded-md border border-white hover:bg-sky-600 transition-colors text-center">&larr; Volver al Manual</a>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+  <main class="max-w-4xl mx-auto w-full px-2 sm:px-4 md:px-6 lg:px-8">
     <div id="exercise-content" class="bg-white rounded-lg shadow-lg">
-      <div class="p-6">
+      <div class="p-3 sm:p-4 md:p-6">
         <div class="progress-container">
           <div class="progress-bar"></div>
           <div class="wind-particles"></div>
           <div class="boat">
-            <img src="assets/sailboat-256x256.png" alt="Barco">
+            <img src="assets/sailing-boat.png" alt="Barco" class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20" style="z-index: 3;">
           </div>
+          <img src="assets/buoy.png" alt="Boya" class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); z-index: 2;">
         </div>
         <div id="question-container"></div>
       </div>
@@ -242,8 +535,8 @@
   </main>
 
   <footer class="bg-slate-100 border-t border-slate-200 mt-auto">
-    <div class="max-w-4xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8 text-center">
-      <p class="text-xs text-slate-500">© ${new Date().getFullYear()} Sailut. Todos los derechos reservados.</p>
+    <div class="max-w-4xl mx-auto py-2 sm:py-3 md:py-4 lg:py-6 px-2 sm:px-4 md:px-6 lg:px-8 text-center">
+      <p class="text-xs sm:text-sm text-slate-500">© ${new Date().getFullYear()} Sailut. Todos los derechos reservados.</p>
     </div>
   </footer>
 
@@ -446,12 +739,17 @@
     let questions = [];
     let currentQuestionIndex = 0;
     let correctAnswers = 0;
+    let totalQuestionsAnswered = 0;
 
     function selectRandomQuestions() {
       // Mezclar todas las preguntas y seleccionar 7
       questions = [...allQuestions]
         .sort(() => Math.random() - 0.5)
         .slice(0, 7);
+      // Reiniciar contadores cuando se seleccionan nuevas preguntas
+      currentQuestionIndex = 0;
+      correctAnswers = 0;
+      totalQuestionsAnswered = 0;
     }
 
     function createWindParticles() {
@@ -510,24 +808,25 @@
     }
 
     function showQuestion() {
-      // Verificar si necesitamos seleccionar nuevas preguntas
       if (currentQuestionIndex >= questions.length) {
-        selectRandomQuestions();
-        currentQuestionIndex = 0;
+        // Si llegamos aquí, significa que ya terminamos todas las preguntas
+        // El mensaje de éxito ya debería haberse mostrado en checkAnswer
+        return;
       }
 
       const question = questions[currentQuestionIndex];
+      // Mezclar aleatoriamente las opciones
+      const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
       document.getElementById('question-container').innerHTML = `
         <div class="question">
           <p>${question.definition}</p>
           <div class="options">
-            ${question.options.map(option => `
+            ${shuffledOptions.map(option => `
               <div class="option" onclick="checkAnswer('${option}')">${option}</div>
             `).join('')}
           </div>
         </div>
       `;
-      
       updateProgress();
     }
 
@@ -536,6 +835,9 @@
       const options = document.querySelectorAll('.option');
       const feedback = document.createElement('div');
       feedback.className = 'feedback';
+      
+      // Incrementar el contador de preguntas respondidas
+      totalQuestionsAnswered++;
       
       if (selectedOption === currentQuestion.correctAnswer) {
         feedback.textContent = '¡Correcto!';
@@ -565,12 +867,14 @@
       setTimeout(() => {
         const progress = (correctAnswers / questions.length) * 100;
         
-        if (progress >= 100) {
+        if (currentQuestionIndex >= questions.length - 1) {
+          // Última pregunta completada, mostrar mensaje de éxito
           document.getElementById('question-container').innerHTML = `
-            <div class="feedback correct">
+            <div class="feedback correct" style="background-color: #3b82f6; color: white; border: 2px solid #1d4ed8;">
               <h2>¡Felicidades!</h2>
               <p>Has completado el ejercicio con éxito.</p>
-              <button onclick="location.reload()" class="bg-sky-600 hover:bg-sky-700 text-white font-medium px-6 py-3 rounded-lg transition-colors">
+              <p style="margin: 0.75rem 0; font-size: 0.95rem; opacity: 0.9; font-style: italic;">Tardaste ${totalQuestionsAnswered} maniobras para llegar a la boya.</p>
+              <button onclick="location.reload()" class="bg-white hover:bg-gray-100 text-blue-600 font-medium px-6 py-3 rounded-lg transition-colors">
                 Volver a empezar
               </button>
             </div>
@@ -586,6 +890,7 @@
       // Reiniciar el ejercicio
       currentQuestionIndex = 0;
       correctAnswers = 0;
+      totalQuestionsAnswered = 0;
       questions = getRandomQuestions(7);
       
       // Limpiar y reiniciar las partículas de viento
@@ -606,6 +911,8 @@
     window.onload = function() {
       selectRandomQuestions();
       currentQuestionIndex = 0;
+      correctAnswers = 0;
+      totalQuestionsAnswered = 0;
       createWindParticles();
       showQuestion();
     };
