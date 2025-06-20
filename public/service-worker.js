@@ -1,9 +1,14 @@
-const CACHE_NAME = 'sailnav-cache-v1';
+const CACHE_NAME = 'sailnav-cache-v3';
 const urlsToCache = [
   '/',
   '/index.html',
   '/exercise.html',
+  '/elementos-del-barco.html',
   '/assets/knot.gif',
+  '/assets/sailboat-256x256.png',
+  '/assets/buoy.png',
+  '/assets/sailboat.png',
+  '/assets/velero.png',
   '/manifest.json',
   // Agrega aquí otros archivos importantes (CSS, JS, imágenes, etc.)
 ];
