@@ -351,12 +351,14 @@
             { name: 'Por la proa', angle: 270, pos: 6 }            // antes 180 → ahora apunta hacia arriba
           ];
           
-          let currentRumboIndex = 0;
+          // Crear un array aleatorio de índices para las preguntas
+          let questionOrder = [...Array(rumbos.length).keys()].sort(() => Math.random() - 0.5);
+          let currentQuestionIndex = 0;
           let correctAnswers = 0;
           let totalQuestions = rumbos.length;
 
           function showNextRumbo() {
-            if (currentRumboIndex >= rumbos.length) {
+            if (currentQuestionIndex >= questionOrder.length) {
               // Mostrar pantalla de finalización
               container.innerHTML = `
                 <div class="flex flex-col items-center justify-center py-8 sm:py-16 px-4">
@@ -370,6 +372,7 @@
               return;
             }
 
+            const currentRumboIndex = questionOrder[currentQuestionIndex];
             const currentRumbo = rumbos[currentRumboIndex];
             // Mezclar las opciones
             const options = [...rumbos].sort(() => Math.random() - 0.5);
@@ -381,7 +384,7 @@
                     <h3 class="text-xl sm:text-2xl font-semibold text-slate-800 mb-2 text-center">${currentRumbo.name}</h3>
                     <p class="text-sm sm:text-base text-slate-600 text-center mb-4">Selecciona la posición correcta en el diagrama</p>
                     <div class="mt-4 text-center text-xs sm:text-sm text-slate-500">
-                      Pregunta ${currentRumboIndex + 1} de ${totalQuestions}
+                      Pregunta ${currentQuestionIndex + 1} de ${totalQuestions}
                     </div>
                   </div>
                 </div>
@@ -418,7 +421,7 @@
                         }).join('');
                       })()}
                     </g>
-                    <g id="velero" transform="rotate(0 260 260)">
+                    <g id="velero-container">
                       <image href="assets/rumbo.png" x="185" y="110" width="150" height="300" />
                     </g>
                     <defs>
@@ -445,6 +448,7 @@
           }
 
           function handleRumboSelection(selectedPos) {
+            const currentRumboIndex = questionOrder[currentQuestionIndex];
             const correctPos = rumbos[currentRumboIndex].pos;
             const feedback = document.getElementById('feedback');
             const circles = document.querySelectorAll('.rumbo-option');
@@ -458,10 +462,11 @@
                   feedback.textContent = '¡Correcto!';
                   feedback.className = 'mt-4 text-center text-lg font-medium text-green-600';
                   correctAnswers++;
+                  // Mostrar feedback verde por 800ms antes de continuar
                   setTimeout(() => {
-                    currentRumboIndex++;
+                    currentQuestionIndex++;
                     showNextRumbo();
-                  }, 1000);
+                  }, 800);
                 } else {
                   circle.setAttribute('fill', '#ef4444');
                   circle.setAttribute('stroke', '#dc2626');
