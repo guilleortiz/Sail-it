@@ -133,24 +133,30 @@
       // Actualizar el estilo de las opciones
       document.querySelectorAll('.caracteristica-option').forEach(option => {
         const id = option.dataset.id;
-        const checkbox = option.querySelector('input[type="checkbox"]');
+        const checkbox = option.querySelector('.caracteristica-checkbox');
         const isCorrect = caracteristicas.find(c => c.id === id).isCorrect;
         const wasSelected = selectedOptions.has(id);
 
         if (isCorrect && wasSelected) {
           // Opciones correctas seleccionadas en verde
           option.classList.add('bg-green-50', 'border-green-200');
-          option.classList.remove('hover:bg-slate-50');
+          option.classList.remove('hover:bg-slate-50', 'selected');
+          checkbox.classList.add('bg-green-600', 'border-green-600');
+          checkbox.classList.remove('bg-sky-600', 'border-sky-600', 'border-slate-300');
         } else if (!isCorrect) {
           // Todas las opciones incorrectas en rojo
           option.classList.add('bg-red-50', 'border-red-200');
-          option.classList.remove('hover:bg-slate-50');
+          option.classList.remove('hover:bg-slate-50', 'selected');
+          checkbox.classList.add('bg-red-600', 'border-red-600');
+          checkbox.classList.remove('bg-sky-600', 'border-sky-600', 'border-slate-300');
         } else if (isCorrect && !wasSelected) {
           // Opciones correctas no seleccionadas en amarillo
           option.classList.add('bg-yellow-50', 'border-yellow-200');
-          option.classList.remove('hover:bg-slate-50');
+          option.classList.remove('hover:bg-slate-50', 'selected');
+          checkbox.classList.add('bg-yellow-600', 'border-yellow-600');
+          checkbox.classList.remove('bg-sky-600', 'border-sky-600', 'border-slate-300');
         }
-        checkbox.disabled = true;
+        option.style.pointerEvents = 'none';
       });
 
       // Mostrar mensaje de resultado
@@ -202,13 +208,8 @@
               <div class="space-y-3">
                 ${caracteristicas.map((caracteristica, index) => `
                   <div class="flex items-center p-3 border rounded-lg hover:bg-slate-50 transition-colors cursor-pointer caracteristica-option" data-id="${caracteristica.id}">
-                    <input 
-                      type="checkbox" 
-                      id="caracteristica-${index}" 
-                      class="h-4 w-4 text-sky-600 border-slate-300 rounded focus:ring-sky-500"
-                      data-id="${caracteristica.id}"
-                    >
-                    <label for="caracteristica-${index}" class="ml-3 text-sm sm:text-base font-medium text-slate-900">${caracteristica.name}</label>
+                    <div class="w-4 h-4 border-2 border-slate-300 rounded mr-3 flex-shrink-0 caracteristica-checkbox"></div>
+                    <span class="text-sm sm:text-base font-medium text-slate-900">${caracteristica.name}</span>
                   </div>
                 `).join('')}
               </div>
@@ -229,9 +230,22 @@
       // Agregar event listeners para las opciones
       document.querySelectorAll('.caracteristica-option').forEach(option => {
         option.addEventListener('click', (e) => {
-          const checkbox = option.querySelector('input[type="checkbox"]');
-          checkbox.checked = !checkbox.checked;
-          handleCaracteristicaSelection(option.dataset.id);
+          const checkbox = option.querySelector('.caracteristica-checkbox');
+          const isSelected = option.classList.contains('selected');
+          
+          if (isSelected) {
+            // Deseleccionar
+            option.classList.remove('selected');
+            checkbox.classList.remove('bg-sky-600', 'border-sky-600');
+            checkbox.classList.add('border-slate-300');
+            selectedOptions.delete(option.dataset.id);
+          } else {
+            // Seleccionar
+            option.classList.add('selected');
+            checkbox.classList.add('bg-sky-600', 'border-sky-600');
+            checkbox.classList.remove('border-slate-300');
+            selectedOptions.add(option.dataset.id);
+          }
         });
       });
 
