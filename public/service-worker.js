@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sailnav-cache-v2';
+const CACHE_NAME = 'sailing-navigation-v5';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -24,5 +24,25 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => response || fetch(event.request))
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          // Eliminar todos los caches que no sean el actual
+          if (cacheName !== CACHE_NAME) {
+            console.log('Eliminando cache antiguo:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => {
+      // Forzar la actualización inmediata
+      console.log('Service Worker activado y caches limpiados');
+      return self.clients.claim();
+    })
   );
 }); 

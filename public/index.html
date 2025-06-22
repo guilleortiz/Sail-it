@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
   <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
+  <meta http-equiv="Expires" content="-1">
   <title>Ejercicios de Navegación</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="manifest" href="manifest.json">
@@ -101,7 +101,7 @@
       <div id="info-cards-container" class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
         <a href="exercise.html" class="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
           <div class="flex flex-col items-center text-center">
-            ${getWindIconSVG()}
+            ${getRudderIconSVG()}
             <h3 class="text-lg sm:text-xl font-semibold text-slate-800 mb-2">Maniobras</h3>
             <p class="text-slate-600 text-sm sm:text-base">Aprende sobre las maniobras básicas de navegación y cómo ejecutarlas correctamente.</p>
           </div>
@@ -165,22 +165,8 @@
         </svg>`;
     }
     
-    function getWindIconSVG(className = "w-16 h-16 text-sky-600 mb-4") {
-      return `
-        <svg 
-          class="${className}"
-          viewBox="0 0 64 64" 
-          fill="none" 
-          stroke="currentColor" 
-          stroke-width="2.5" 
-          stroke-linecap="round" 
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M10 32 H54" />
-          <path d="M12 24 Q24 18 32 24 T48 24" />
-          <path d="M16 40 Q28 34 36 40 T52 40" />
-        </svg>`;
+    function getRudderIconSVG(className = "w-16 h-16 mb-4") {
+      return `<img src="assets/rudder.png" alt="Timón" class="${className}">`;
     }
 
     function getSailboatIconSVG(className = "w-16 h-16 text-sky-600 mb-4") {
@@ -214,10 +200,19 @@
         </svg>`;
     }
 
+    function getKnotIconSVG(className = "w-12 h-12 mb-4 mx-auto mt-4") {
+      return `<img src="assets/knot.png" alt="Nudo" class="${className}">`;
+    }
+
+    function getRumboIconSVG(className = "w-16 h-16 mb-4 mx-auto") {
+      return `<img src="assets/rumbo.png" alt="Rumbo" class="${className}">`;
+    }
+
     function getRumbosIconSVG(className = "w-16 h-16 text-sky-600 mb-4") {
       // SVG de rosa de los vientos estilizada para representar rumbos
       return `
-        <svg class="${className}" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <svg class="${className}" 
+        viewBox="0 0 64 64" fill="none" aria-hidden="true">
           <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2.5" fill="currentColor" fill-opacity="0.05"/>
           <polygon points="32,10 36,32 32,54 28,32" fill="currentColor" fill-opacity="0.4"/>
           <polygon points="10,32 32,36 54,32 32,28" fill="currentColor" fill-opacity="0.2"/>
@@ -345,9 +340,9 @@
       const cardDataItems = [
         { id: '1', iconFn: getRumbosIconSVG, title: 'Rumbos', description: 'Nombre de los rumbos segun el viento.', href: 'exercise.html?topic=rumbos' },
         { id: '2', iconFn: getSailboatIconSVG, title: 'Elementos del Barco', description: 'Conoce los diferentes elementos que componen un barco y sus funciones.', href: 'elementos-del-barco.html' },
-        { id: '3', iconFn: getSailboatIconSVG, title: 'Maniobras', description: 'Las diferentes maniobras de navegación.', href: 'exercise.html?topic=maniobras' },
+        { id: '3', iconFn: getRudderIconSVG, title: 'Maniobras', description: 'Las diferentes maniobras de navegación.', href: 'exercise.html?topic=maniobras' },
         { id: '4', iconFn: getShipIconSVG, title: 'Características del Buque', description: 'Aprende las características esenciales que debe tener un buque.', href: 'exercise.html?topic=caracteristicas-del-buque' },
-        { id: '5', iconFn: getTwinSailboatsIconSVG, title: 'Nudos', description: 'Conocer los nudos de los cabos.', href: 'exercise.html?topic=nudos' }
+        { id: '5', iconFn: getKnotIconSVG, title: 'Nudos', description: 'Conocer los nudos de los cabos.', href: 'exercise.html?topic=nudos' }
       ];
       const infoCardsContainer = document.getElementById('info-cards-container');
       if (infoCardsContainer) {
@@ -424,9 +419,9 @@
 </script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js?v=4');
+  navigator.serviceWorker.register('/service-worker.js?v=5');
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js?v=4');
+    navigator.serviceWorker.register('/service-worker.js?v=5');
   });
 }
 </script>
