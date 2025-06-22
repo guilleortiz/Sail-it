@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Ejercicio de Navegación</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="manifest" href="manifest.json">
@@ -601,6 +604,14 @@
         if (descriptionElement) descriptionElement.textContent = 'No se pudo cargar el ejercicio. Por favor, vuelve al manual y selecciona un tema.';
       }
     });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js?v=4');
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js?v=4');
+      });
+    }
   </script>
 </body>
 </html>
