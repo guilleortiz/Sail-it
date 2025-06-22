@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Ejercicios de Navegación</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="manifest" href="manifest.json">
@@ -103,7 +106,10 @@
             <p class="text-slate-600 text-sm sm:text-base">Aprende sobre las maniobras básicas de navegación y cómo ejecutarlas correctamente.</p>
           </div>
         </a>
-        <a href="elementos-barco.html" class="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+        <a href="elementos-del-barco.html" class="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 relative">
+          <div class="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-md">
+            NUEVO
+          </div>
           <div class="flex flex-col items-center text-center">
             ${getSailboatIconSVG()}
             <h3 class="text-lg sm:text-xl font-semibold text-slate-800 mb-2">Elementos del Barco</h3>
@@ -338,10 +344,10 @@
       
       const cardDataItems = [
         { id: '1', iconFn: getRumbosIconSVG, title: 'Rumbos', description: 'Nombre de los rumbos segun el viento.', href: 'exercise.html?topic=rumbos' },
-        { id: '2', iconFn: getSailboatIconSVG, title: 'Maniobras', description: 'Las diferentes maniobras de navegación.', href: 'exercise.html?topic=maniobras' },
-        { id: '3', iconFn: getShipIconSVG, title: 'Características del Buque', description: 'Aprende las características esenciales que debe tener un buque.', href: 'exercise.html?topic=caracteristicas-del-buque' },
-        { id: '5', iconFn: getSailboatIconSVG, title: 'Elementos del Barco', description: 'Conoce los diferentes elementos que componen un barco y sus funciones.', href: 'elementos-del-barco.html' },
-        { id: '4', iconFn: getTwinSailboatsIconSVG, title: 'Nudos', description: 'Conocer los nudos de los cabos.', href: 'exercise.html?topic=nudos' }
+        { id: '2', iconFn: getSailboatIconSVG, title: 'Elementos del Barco', description: 'Conoce los diferentes elementos que componen un barco y sus funciones.', href: 'elementos-del-barco.html' },
+        { id: '3', iconFn: getSailboatIconSVG, title: 'Maniobras', description: 'Las diferentes maniobras de navegación.', href: 'exercise.html?topic=maniobras' },
+        { id: '4', iconFn: getShipIconSVG, title: 'Características del Buque', description: 'Aprende las características esenciales que debe tener un buque.', href: 'exercise.html?topic=caracteristicas-del-buque' },
+        { id: '5', iconFn: getTwinSailboatsIconSVG, title: 'Nudos', description: 'Conocer los nudos de los cabos.', href: 'exercise.html?topic=nudos' }
       ];
       const infoCardsContainer = document.getElementById('info-cards-container');
       if (infoCardsContainer) {
@@ -351,10 +357,16 @@
           const topicSlug = generateTopicSlug(card.title);
           const cardHref = card.href || `exercise.html?topic=${topicSlug}`;
           console.log(`  Card: "${card.title}", Slug: "${topicSlug}", Href: "${cardHref}"`);
+          
+          // Agregar label "NUEVO" solo para "Elementos del Barco"
+          const nuevoLabel = card.title === 'Elementos del Barco' ? 
+            '<div class="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-md">NUEVO</div>' : '';
+          
           infoCardsHTML += `
             <a href="${cardHref}" 
                aria-label="Ver ejercicio sobre ${card.title}"
-               class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+               class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 relative">
+              ${nuevoLabel}
               <article class="flex flex-col items-center text-center">
                 <div class="mb-4">${card.iconFn()}</div>
                 <h3 class="text-xl font-semibold text-slate-800 mb-2">${card.title}</h3>
@@ -412,10 +424,9 @@
 </script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js');
+  navigator.serviceWorker.register('/service-worker.js?v=4');
   window.addEventListener('load', function() {
-    
-    navigator.serviceWorker.register('/service-worker.js');
+    navigator.serviceWorker.register('/service-worker.js?v=4');
   });
 }
 </script>

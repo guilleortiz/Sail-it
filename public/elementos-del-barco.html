@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Elementos del Barco - Ejercicio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="manifest" href="manifest.json">
@@ -536,7 +539,7 @@
 
   <footer class="bg-slate-100 border-t border-slate-200 mt-auto">
     <div class="max-w-4xl mx-auto py-2 sm:py-3 md:py-4 lg:py-6 px-2 sm:px-4 md:px-6 lg:px-8 text-center">
-      <p class="text-xs sm:text-sm text-slate-500">© ${new Date().getFullYear()} Sailut. Todos los derechos reservados.</p>
+      <p class="text-xs sm:text-sm text-slate-500">© </p>
     </div>
   </footer>
 
@@ -746,10 +749,13 @@
       questions = [...allQuestions]
         .sort(() => Math.random() - 0.5)
         .slice(0, 7);
-      // Reiniciar contadores cuando se seleccionan nuevas preguntas
+      // Solo reiniciar el índice de pregunta, mantener el progreso acumulado
       currentQuestionIndex = 0;
-      correctAnswers = 0;
-      totalQuestionsAnswered = 0;
+      // NO reiniciar correctAnswers aquí para mantener el progreso
+      // correctAnswers = 0; // Esta línea se elimina
+      // totalQuestionsAnswered = 0; // Esta línea se elimina
+      
+      // console.log('Nuevas preguntas seleccionadas. Progreso acumulado mantenido:', correctAnswers);
     }
 
     function createWindParticles() {
@@ -805,18 +811,27 @@
       
       progressBar.style.width = `${progress}%`;
       boat.style.left = `${progress}%`;
+      
+      // Log del progreso en tiempo real
+      // console.log(`Progreso actualizado: ${progress.toFixed(1)}% (${correctAnswers}/${questions.length} correctas)`);
     }
 
     function showQuestion() {
       if (currentQuestionIndex >= questions.length) {
-        // Si llegamos aquí, significa que ya terminamos todas las preguntas
-        // El mensaje de éxito ya debería haberse mostrado en checkAnswer
-        return;
+        // Si se agotaron las preguntas pero no llegamos al 100%, seleccionar nuevas preguntas
+        selectRandomQuestions();
+        currentQuestionIndex = 0;
       }
 
       const question = questions[currentQuestionIndex];
       // Mezclar aleatoriamente las opciones
       const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
+      
+      // Log de la pregunta actual y respuesta correcta
+      // console.log(`Pregunta ${currentQuestionIndex + 1}: "${question.definition}"`);
+      // console.log(`Respuesta correcta: "${question.correctAnswer}"`);
+      // console.log(`Opciones disponibles: ${shuffledOptions.join(', ')}`);
+      
       document.getElementById('question-container').innerHTML = `
         <div class="question">
           <p>${question.definition}</p>
@@ -835,6 +850,10 @@
       const options = document.querySelectorAll('.option');
       const feedback = document.createElement('div');
       feedback.className = 'feedback';
+      
+      // Log de la respuesta seleccionada
+      // console.log(`Respuesta seleccionada: "${selectedOption}"`);
+      // console.log(`¿Es correcta? ${selectedOption === currentQuestion.correctAnswer ? 'SÍ' : 'NO'}`);
       
       // Incrementar el contador de preguntas respondidas
       totalQuestionsAnswered++;
@@ -867,19 +886,25 @@
       setTimeout(() => {
         const progress = (correctAnswers / questions.length) * 100;
         
-        if (currentQuestionIndex >= questions.length - 1) {
-          // Última pregunta completada, mostrar mensaje de éxito
+        // Log del progreso para debugging
+        // console.log(`Progreso actual: ${progress.toFixed(1)}% (${correctAnswers}/${questions.length} correctas)`);
+        // console.log(`Índice de pregunta actual: ${currentQuestionIndex}, Total preguntas: ${questions.length}`);
+        
+        if (progress >= 100) {
+          // Progreso al 100%, mostrar mensaje de éxito
+          // console.log('¡Ejercicio completado! Mostrando mensaje de éxito...');
           document.getElementById('question-container').innerHTML = `
-            <div class="feedback correct" style="background-color: #3b82f6; color: white; border: 2px solid #1d4ed8;">
+            <div class="feedback correct" style="background-color: #0369a1; color: white; border: 2px solid #0c4a6e; margin-top: 2rem;">
               <h2>¡Felicidades!</h2>
               <p>Has completado el ejercicio con éxito.</p>
-              <p style="margin: 0.75rem 0; font-size: 0.95rem; opacity: 0.9; font-style: italic;">Tardaste ${totalQuestionsAnswered} maniobras para llegar a la boya.</p>
+              <p style="margin: 0.75rem 0; font-size: 0.95rem; opacity: 0.9; font-style: italic;">Tuviste que hacer ${totalQuestionsAnswered} maniobras para llegar a la boya.</p>
               <button onclick="location.reload()" class="bg-white hover:bg-gray-100 text-blue-600 font-medium px-6 py-3 rounded-lg transition-colors">
                 Volver a empezar
               </button>
             </div>
           `;
         } else {
+          // console.log('Continuando con la siguiente pregunta...');
           currentQuestionIndex++;
           showQuestion();
         }
@@ -916,6 +941,13 @@
       createWindParticles();
       showQuestion();
     };
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js?v=4');
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js?v=4');
+      });
+    }
   </script>
 </body>
 </html> 
