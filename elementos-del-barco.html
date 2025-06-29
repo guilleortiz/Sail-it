@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Elementos del Barco - Ejercicio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1976d2">
+  <style>
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f8fafc;
+      color: #334155;
+      -webkit-tap-highlight-color: transparent;
+    }
+    main {
+      flex-grow: 1;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    header, footer {
+      flex-shrink: 0;
+    }
+    button, 
+    a {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .progress-container {
+      width: 100%;
+      background-color: transparent;
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+      position: relative;
+      height: 1.5rem;
+      overflow: visible;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background-color: transparent;
+      border-radius: 0.5rem;
+      transition: width 2s ease-in-out;
+      position: relative;
+      z-index: 1;
+    }
+    .boat {
+      position: absolute;
+      top: -1rem;
+      left: 0;
+      width: 5rem;
+      height: 4rem;
+      transition: left 2s ease-in-out;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+    .boat svg {
+      width: 100%;
+      height: 100%;
+    }
+    .wind-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 10;
+      width: 100vw;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      overflow: visible;
+    }
+    .wind-particles.active {
+      opacity: 1;
+    }
+    .wind-particle {
+      position: absolute;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(to right, 
+        rgba(147, 197, 253, 0) 0%,
+        rgba(147, 197, 253, 0.3) 20%,
+        rgba(147, 197, 253, 0.7) 50%,
+        rgba(147, 197, 253, 0.3) 80%,
+        rgba(147, 197, 253, 0) 100%
+      );
+      border-radius: 1px;
+      animation: wind 3s linear infinite;
+      left: 0;
+      transform-origin: center;
+      filter: blur(0.5px);
+    }
+    @keyframes wind {
+      0% {
+        transform: translateX(-100vw) scaleX(0.2);
+        opacity: 0;
+      }
+      5% {
+        transform: translateX(-80vw) scaleX(1.2);
+        opacity: 0.7;
+      }
+      95% {
+        transform: translateX(80vw) scaleX(1.2);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateX(100vw) scaleX(0.2);
+        opacity: 0;
+      }
+    }
+    .wind-particles.wind-left .wind-particle {
+      animation-direction: reverse;
+    }
+    @keyframes windReverse {
+      0% {
+        transform: translateX(100vw) scaleX(0.2);
+        opacity: 0;
+      }
+      5% {
+        transform: translateX(80vw) scaleX(1.2);
+        opacity: 0.7;
+      }
+      95% {
+        transform: translateX(-80vw) scaleX(1.2);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateX(-100vw) scaleX(0.2);
+        opacity: 0;
+      }
+    }
+    .boat img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .question {
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    }
+    .options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .option {
+      padding: 0.75rem 1rem;
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option:hover {
+      background-color: #f8fafc;
+      border-color: #94a3b8;
+    }
+    .option.correct {
+      background-color: #dcfce7;
+      border-color: #86efac;
+      color: #166534;
+    }
+    .option.incorrect {
+      background-color: #fee2e2;
+      border-color: #fca5a5;
+      color: #991b1b;
+      animation: shake 0.5s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    .feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+    .feedback.correct {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    .feedback.incorrect {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    .next-button {
+      display: none;
+    }
+    @media screen and (max-width: 768px) {
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      
+      main {
+        padding: 0.5rem;
+      }
+      
+      #exercise-content {
+        padding: 1rem !important;
+        margin: 0.5rem;
+      }
+      
+      .progress-container {
+        height: 1.25rem;
+        margin: 1rem 0;
+      }
+      
+      .boat {
+        width: 4rem;
+        height: 3rem;
+        top: -0.75rem;
+      }
+      
+      .question {
+        margin: 1rem 0;
+        padding: 1rem;
+      }
+      
+      .question p {
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+      
+      .options {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+      }
+      
+      .option {
+        padding: 1rem 0.75rem;
+        font-size: 1rem;
+        min-height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      
+      .feedback {
+        margin-top: 0.75rem;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+      }
+      
+      .feedback.correct h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .feedback.correct p {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .feedback.correct button {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+      }
+    }
+    @media screen and (max-width: 480px) {
+      main {
+        padding: 0.25rem;
+      }
+      
+      #exercise-content {
+        padding: 0.75rem !important;
+        margin: 0.25rem;
+      }
+      
+      .progress-container {
+        height: 1rem;
+        margin: 0.75rem 0;
+      }
+      
+      .boat {
+        width: 4rem;
+        height: 3rem;
+      }
+      
+      .question {
+        margin: 0.75rem 0;
+        padding: 0.75rem;
+      }
+      
+      .question p {
+        font-size: 0.9rem;
+      }
+      
+      .option {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+        min-height: 2.5rem;
+      }
+      
+      .feedback {
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        font-size: 0.85rem;
+      }
+      
+      .feedback.correct h2 {
+        font-size: 1.25rem;
+      }
+      
+      .feedback.correct p {
+        font-size: 0.9rem;
+      }
+    }
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+      main {
+        padding: 1rem;
+      }
+      
+      #exercise-content {
+        padding: 1.5rem !important;
+      }
+      
+      .question {
+        margin: 1.25rem 0;
+        padding: 1.25rem;
+      }
+      
+      .options {
+        gap: 1rem;
+      }
+      
+      .option {
+        padding: 1rem 1.25rem;
+        font-size: 1.1rem;
+      }
+    }
+    @media screen and (min-width: 1025px) {
+      main {
+        padding: 2rem;
+      }
+      
+      #exercise-content {
+        padding: 2rem !important;
+      }
+      
+      .question {
+        margin: 2rem 0;
+        padding: 2rem;
+      }
+      
+      .options {
+        gap: 1.5rem;
+      }
+      
+      .option {
+        padding: 1.25rem 1.5rem;
+        font-size: 1.2rem;
+      }
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .option {
+        min-height: 3.5rem;
+        padding: 1rem;
+        font-size: 1.1rem;
+      }
+      
+      .option:hover {
+        background-color: white;
+        border-color: #e2e8f0;
+      }
+      
+      .option:active {
+        background-color: #f8fafc;
+        border-color: #94a3b8;
+        transform: scale(0.98);
+      }
+      
+      button, a {
+        min-height: 48px;
+        min-width: 48px;
+      }
+    }
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+      main {
+        padding: 0.5rem;
+      }
+      
+      #exercise-content {
+        padding: 0.75rem !important;
+      }
+      
+      .progress-container {
+        height: 1rem;
+        margin: 0.5rem 0;
+      }
+      
+      .question {
+        margin: 0.5rem 0;
+        padding: 0.75rem;
+      }
+      
+      .options {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+      }
+      
+      .option {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        min-height: 2.5rem;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .boat {
+        transition: left 1s ease-in-out;
+      }
+      
+      .progress-bar {
+        transition: width 1s ease-in-out;
+      }
+      
+      .option {
+        transition: none;
+      }
+      
+      .wind-particle {
+        animation: none;
+      }
+    }
+
+    /* Responsividad del header y footer */
+    @media screen and (max-width: 768px) {
+      header {
+        padding: 0.5rem 0;
+      }
+      
+      header h1 {
+        font-size: 1.1rem !important;
+      }
+      
+      header a {
+        font-size: 0.85rem !important;
+        padding: 0.5rem 0.75rem !important;
+      }
+      
+      footer {
+        padding: 1rem 0;
+      }
+      
+      footer p {
+        font-size: 0.75rem;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      header {
+        padding: 0.25rem 0;
+      }
+      
+      header h1 {
+        font-size: 1rem !important;
+      }
+      
+      header a {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.6rem !important;
+        width: auto !important;
+      }
+      
+      footer {
+        padding: 0.75rem 0;
+      }
+      
+      footer p {
+        font-size: 0.7rem;
+      }
+    }
+
+    @media screen and (max-width: 768px) and (orientation: landscape) {
+      header {
+        padding: 0.25rem 0;
+      }
+      
+      header h1 {
+        font-size: 1rem !important;
+      }
+      
+      header a {
+        font-size: 0.8rem !important;
+        padding: 0.3rem 0.5rem !important;
+      }
+      
+      main {
+        padding: 0.25rem;
+      }
+      
+      #exercise-content {
+        padding: 0.5rem !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-700">
+  <header class="bg-sky-700 shadow-sm">
+    <div class="max-w-4xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-3 md:py-4 flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-2 md:gap-0">
+      <h1 class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white text-center sm:text-left">Elementos del Barco</h1>
+      <a href="index.html" class="w-full sm:w-auto text-xs sm:text-sm md:text-base text-white hover:text-sky-100 font-medium px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-2 rounded-md border border-white hover:bg-sky-600 transition-colors text-center">&larr; Volver al Manual</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto w-full px-2 sm:px-4 md:px-6 lg:px-8">
+    <div id="exercise-content" class="bg-white rounded-lg shadow-lg">
+      <div class="p-3 sm:p-4 md:p-6">
+        <div class="progress-container">
+          <div class="progress-bar"></div>
+          <div class="wind-particles"></div>
+          <div class="boat">
+            <img src="assets/sailing-boat.png" alt="Barco" class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20" style="z-index: 3;">
+          </div>
+          <img src="assets/buoy.png" alt="Boya" class="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); z-index: 2;">
+        </div>
+        <div id="question-container"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-slate-100 border-t border-slate-200 mt-auto">
+    <div class="max-w-4xl mx-auto py-2 sm:py-3 md:py-4 lg:py-6 px-2 sm:px-4 md:px-6 lg:px-8 text-center">
+      <p class="text-xs sm:text-sm text-slate-500">© </p>
+    </div>
+  </footer>
+
+  
+
+  <script>
+    const allQuestions = [
+      {
+        definition: "Tercio trasero del costado de un barco",
+        correctAnswer: "Aleta",
+        options: ["Aleta", "Amura", "Borda", "Regala"]
+      },
+      {
+        definition: "Tercio delantero del costado de un barco",
+        correctAnswer: "Amura",
+        options: ["Aleta", "Amura", "Borda", "Regala"]
+      },
+      {
+        definition: "Curvatura que tienen los buques, en sentido longitudinal, elevando sus extremos",
+        correctAnswer: "Arrufo",
+        options: ["Arrufo", "Quebranto", "Puntal", "Eslora"]
+      },
+      {
+        definition: "Lados o costados del barco en sentido longitudinal",
+        correctAnswer: "Bandas",
+        options: ["Bandas", "Bordes", "Costados", "Laterales"]
+      },
+      {
+        definition: "Algo está a ______ si se encuentra en la banda desde donde sopla el viento",
+        correctAnswer: "Barlovento",
+        options: ["Barlovento", "Sotavento", "Proa", "Popa"]
+      },
+      {
+        definition: "Costado izquierdo del buque mirando de popa a proa",
+        correctAnswer: "Babor",
+        options: ["Babor", "Estribor", "Proa", "Popa"]
+      },
+      {
+        definition: "Canto superior de los bordes del barco",
+        correctAnswer: "Borda",
+        options: ["Borda", "Regala", "Cubierta", "Carroza"]
+      },
+      {
+        definition: "Estructura que se eleva sobre cubierta, dando lugar a los interiores del barco",
+        correctAnswer: "Carroza",
+        options: ["Carroza", "Cubierta", "Borda", "Regala"]
+      },
+      {
+        definition: "Pieza de gran robustez que, unida a la quilla, termina el barco en la popa",
+        correctAnswer: "Codaste",
+        options: ["Codaste", "Roda", "Quilla", "Quillote"]
+      },
+      {
+        definition: "Cada uno de los pisos que, apoyados sobre los baos, cierran el casco en su parte superior",
+        correctAnswer: "Cubierta",
+        options: ["Cubierta", "Carroza", "Borda", "Regala"]
+      },
+      {
+        definition: "Piezas transversales que, partiendo de la quilla, forman el armazón del barco",
+        correctAnswer: "Cuadernas",
+        options: ["Cuadernas", "Baos", "Quilla", "Codaste"]
+      },
+      {
+        definition: "Peso del barco expresado en toneladas métricas",
+        correctAnswer: "Desplazamiento",
+        options: ["Desplazamiento", "Eslora", "Manga", "Puntal"]
+      },
+      {
+        definition: "Longitud de una embarcación",
+        correctAnswer: "Eslora",
+        options: ["Eslora", "Manga", "Puntal", "Desplazamiento"]
+      },
+      {
+        definition: "Longitud que resulta de medir, de proa a popa, la distancia existente entre los extremos a nivel de la línea de flotación",
+        correctAnswer: "Eslora en flotación",
+        options: ["Eslora en flotación", "Eslora máxima", "Manga en flotación", "Manga máxima"]
+      },
+      {
+        definition: "Longitud máxima total entre los extremos más distantes, midiendo de proa a popa",
+        correctAnswer: "Eslora máxima",
+        options: ["Eslora máxima", "Eslora en flotación", "Manga máxima", "Manga en flotación"]
+      },
+      {
+        definition: "Parte del casco que conforma la popa",
+        correctAnswer: "Espejo",
+        options: ["Espejo", "Codaste", "Roda", "Quilla"]
+      },
+      {
+        definition: "Costado derecho del buque mirando de popa a proa",
+        correctAnswer: "Estribor",
+        options: ["Estribor", "Babor", "Proa", "Popa"]
+      },
+      {
+        definition: "Línea proa-popa que divide longitudinalmente el barco en dos mitades",
+        correctAnswer: "Línea de crujía",
+        options: ["Línea de crujía", "Línea de flotación", "Eslora", "Manga"]
+      },
+      {
+        definition: "Línea divisoria entre la parte del casco que queda sumergida y la que emerge del agua",
+        correctAnswer: "Línea de flotación",
+        options: ["Línea de flotación", "Línea de crujía", "Eslora", "Manga"]
+      },
+      {
+        definition: "Ancho de una embarcación",
+        correctAnswer: "Manga",
+        options: ["Manga", "Eslora", "Puntal", "Desplazamiento"]
+      },
+      {
+        definition: "Ancho de la embarcación, medido sobre la línea de flotación",
+        correctAnswer: "Manga en flotación",
+        options: ["Manga en flotación", "Manga máxima", "Eslora en flotación", "Eslora máxima"]
+      },
+      {
+        definition: "Ancho máximo total, tomando como referencia los extremos más distantes",
+        correctAnswer: "Manga máxima",
+        options: ["Manga máxima", "Manga en flotación", "Eslora máxima", "Eslora en flotación"]
+      },
+      {
+        definition: "Parte del casco que queda por encima de la línea de flotación",
+        correctAnswer: "Obra muerta",
+        options: ["Obra muerta", "Obra viva", "Cubierta", "Carroza"]
+      },
+      {
+        definition: "También llamada carena, es la parte del casco que queda por debajo de la línea de flotación",
+        correctAnswer: "Obra viva",
+        options: ["Obra viva", "Obra muerta", "Cubierta", "Carroza"]
+      },
+      {
+        definition: "Sector del casco comprendido entre la quilla y la línea de flotación, donde el costado de la embarcación pasa a ser el fondo",
+        correctAnswer: "Pantoque",
+        options: ["Pantoque", "Quilla", "Codaste", "Roda"]
+      },
+      {
+        definition: "Corredores laterales para transitar de proa a popa",
+        correctAnswer: "Pasillos",
+        options: ["Pasillos", "Cubierta", "Carroza", "Borda"]
+      },
+      {
+        definition: "Parte trasera del buque tomando como referencia la dirección en la que avanza",
+        correctAnswer: "Popa",
+        options: ["Popa", "Proa", "Babor", "Estribor"]
+      },
+      {
+        definition: "Parte delantera del buque tomando como referencia la dirección en la que avanza",
+        correctAnswer: "Proa",
+        options: ["Proa", "Popa", "Babor", "Estribor"]
+      },
+      {
+        definition: "Distancia medida desde la cubierta hasta la quilla",
+        correctAnswer: "Puntal",
+        options: ["Puntal", "Eslora", "Manga", "Desplazamiento"]
+      },
+      {
+        definition: "Lo contrario al arrufo. Forma que presenta el casco de un buque cuyo sector medio se encuentra más elevado que su proa y su popa",
+        correctAnswer: "Quebranto",
+        options: ["Quebranto", "Arrufo", "Puntal", "Eslora"]
+      },
+      {
+        definition: "Pieza longitudinal sobre la que se asientan las cuadernas y que sirve de soporte a todo el buque",
+        correctAnswer: "Quilla",
+        options: ["Quilla", "Codaste", "Roda", "Quillote"]
+      },
+      {
+        definition: "Pieza rellena de hormigón o plomo sujeta a la quilla, destinada a disminuir el desplazamiento que sufre el barco por efecto del viento",
+        correctAnswer: "Quillote",
+        options: ["Quillote", "Quilla", "Codaste", "Roda"]
+      },
+      {
+        definition: "Moldura que se coloca en la unión entre la cubierta y las bandas",
+        correctAnswer: "Regala",
+        options: ["Regala", "Borda", "Cubierta", "Carroza"]
+      },
+      {
+        definition: "Pieza sólida ubicada sobre la quilla, a proa del buque",
+        correctAnswer: "Roda",
+        options: ["Roda", "Codaste", "Quilla", "Quillote"]
+      },
+      {
+        definition: "Parte interior del casco, habitualmente cubierta por el piso interior de la embarcación, donde tienden a depositarse residuos líquidos",
+        correctAnswer: "Sentina",
+        options: ["Sentina", "Cubierta", "Carroza", "Borda"]
+      },
+      {
+        definition: "Estará a ______ si nos referimos a la banda por la que el viento se aleja",
+        correctAnswer: "Sotavento",
+        options: ["Sotavento", "Barlovento", "Proa", "Popa"]
+      },
+      {
+        definition: "Pieza plana articulada en un eje vertical, ubicada en popa del barco, y que se utiliza para guiar al mismo en la dirección deseada",
+        correctAnswer: "Timón",
+        options: ["Timón", "Quilla", "Codaste", "Roda"]
+      },
+      {
+        definition: "Sector medio, perpendicular a la crujía, de cada una de las bandas en sentido longitudinal",
+        correctAnswer: "Través",
+        options: ["Través", "Proa", "Popa", "Babor"]
+      }
+    ];
+
+    let questions = [];
+    let currentQuestionIndex = 0;
+    let correctAnswers = 0;
+    let totalQuestionsAnswered = 0;
+
+    function selectRandomQuestions() {
+      // Mezclar todas las preguntas y seleccionar 7
+      questions = [...allQuestions]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 7);
+      // Solo reiniciar el índice de pregunta, mantener el progreso acumulado
+      currentQuestionIndex = 0;
+      // NO reiniciar correctAnswers aquí para mantener el progreso
+      // correctAnswers = 0; // Esta línea se elimina
+      // totalQuestionsAnswered = 0; // Esta línea se elimina
+      
+      // console.log('Nuevas preguntas seleccionadas. Progreso acumulado mantenido:', correctAnswers);
+    }
+
+    function createWindParticles() {
+      const container = document.querySelector('.wind-particles');
+      container.innerHTML = '';
+      
+      // Crear 25 partículas
+      for (let i = 0; i < 25; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'wind-particle';
+        
+        // Distribuir verticalmente
+        const top = Math.random() * 100;
+        particle.style.top = `${top}%`;
+        
+        // Retraso aleatorio para cada partícula
+        const delay = Math.random() * 3;
+        particle.style.animationDelay = `${delay}s`;
+        
+        container.appendChild(particle);
+      }
+    }
+
+    function updateWindDirection(isCorrect) {
+      const container = document.querySelector('.wind-particles');
+      const particles = document.querySelectorAll('.wind-particle');
+      
+      // Activar el contenedor de partículas
+      container.classList.add('active');
+      
+      // Aplicar la animación a cada partícula
+      particles.forEach((particle, index) => {
+        const currentDelay = particle.style.animationDelay;
+        if (isCorrect) {
+          particle.style.animation = `wind 4s cubic-bezier(0.4, 0, 0.2, 1) ${currentDelay} infinite`;
+        } else {
+          particle.style.animation = `windReverse 4s cubic-bezier(0.4, 0, 0.2, 1) ${currentDelay} infinite`;
+        }
+      });
+
+      // Desactivar las partículas después de la animación
+      setTimeout(() => {
+        container.classList.remove('active');
+        // Reiniciar las partículas para la próxima vez
+        setTimeout(createWindParticles, 300);
+      }, 4000);
+    }
+
+    function updateProgress() {
+      const progress = (correctAnswers / questions.length) * 100;
+      const progressBar = document.querySelector('.progress-bar');
+      const boat = document.querySelector('.boat');
+      
+      progressBar.style.width = `${progress}%`;
+      boat.style.left = `${progress}%`;
+      
+      // Log del progreso en tiempo real
+      // console.log(`Progreso actualizado: ${progress.toFixed(1)}% (${correctAnswers}/${questions.length} correctas)`);
+    }
+
+    function showQuestion() {
+      if (currentQuestionIndex >= questions.length) {
+        // Si se agotaron las preguntas pero no llegamos al 100%, seleccionar nuevas preguntas
+        selectRandomQuestions();
+        currentQuestionIndex = 0;
+      }
+
+      const question = questions[currentQuestionIndex];
+      // Mezclar aleatoriamente las opciones
+      const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
+      
+      // Log de la pregunta actual y respuesta correcta
+      // console.log(`Pregunta ${currentQuestionIndex + 1}: "${question.definition}"`);
+      // console.log(`Respuesta correcta: "${question.correctAnswer}"`);
+      // console.log(`Opciones disponibles: ${shuffledOptions.join(', ')}`);
+      
+      document.getElementById('question-container').innerHTML = `
+        <div class="question">
+          <p>${question.definition}</p>
+          <div class="options">
+            ${shuffledOptions.map(option => `
+              <div class="option" onclick="checkAnswer('${option}')">${option}</div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      updateProgress();
+    }
+
+    function checkAnswer(selectedOption) {
+      const currentQuestion = questions[currentQuestionIndex];
+      const options = document.querySelectorAll('.option');
+      const feedback = document.createElement('div');
+      feedback.className = 'feedback';
+      
+      // Log de la respuesta seleccionada
+      // console.log(`Respuesta seleccionada: "${selectedOption}"`);
+      // console.log(`¿Es correcta? ${selectedOption === currentQuestion.correctAnswer ? 'SÍ' : 'NO'}`);
+      
+      // Incrementar el contador de preguntas respondidas
+      totalQuestionsAnswered++;
+      
+      if (selectedOption === currentQuestion.correctAnswer) {
+        feedback.textContent = '¡Correcto!';
+        feedback.className += ' correct';
+        correctAnswers++;
+        updateWindDirection(true);
+      } else {
+        feedback.textContent = 'Incorrecto. Inténtalo de nuevo.';
+        feedback.className += ' incorrect';
+        correctAnswers = Math.max(0, correctAnswers - 0.5);
+        updateWindDirection(false);
+      }
+      
+      options.forEach(option => {
+        option.style.pointerEvents = 'none';
+        if (option.textContent === currentQuestion.correctAnswer) {
+          option.className += ' correct';
+        } else if (option.textContent === selectedOption && selectedOption !== currentQuestion.correctAnswer) {
+          option.className += ' incorrect';
+        }
+      });
+      
+      document.getElementById('question-container').appendChild(feedback);
+      
+      updateProgress();
+
+      setTimeout(() => {
+        const progress = (correctAnswers / questions.length) * 100;
+        
+        // Log del progreso para debugging
+        // console.log(`Progreso actual: ${progress.toFixed(1)}% (${correctAnswers}/${questions.length} correctas)`);
+        // console.log(`Índice de pregunta actual: ${currentQuestionIndex}, Total preguntas: ${questions.length}`);
+        
+        if (progress >= 100) {
+          // Progreso al 100%, mostrar mensaje de éxito
+          // console.log('¡Ejercicio completado! Mostrando mensaje de éxito...');
+          document.getElementById('question-container').innerHTML = `
+            <div class="feedback correct" style="background-color: #0369a1; color: white; border: 2px solid #0c4a6e; margin-top: 2rem;">
+              <h2>¡Felicidades!</h2>
+              <p>Has completado el ejercicio con éxito.</p>
+              <p style="margin: 0.75rem 0; font-size: 0.95rem; opacity: 0.9; font-style: italic;">Tuviste que hacer ${totalQuestionsAnswered} maniobras para llegar a la boya.</p>
+              <button onclick="location.reload()" class="bg-white hover:bg-gray-100 text-blue-600 font-medium px-6 py-3 rounded-lg transition-colors">
+                Volver a empezar
+              </button>
+            </div>
+          `;
+        } else {
+          // console.log('Continuando con la siguiente pregunta...');
+          currentQuestionIndex++;
+          showQuestion();
+        }
+      }, 2500);
+    }
+
+    function startExercise() {
+      // Reiniciar el ejercicio
+      currentQuestionIndex = 0;
+      correctAnswers = 0;
+      totalQuestionsAnswered = 0;
+      questions = getRandomQuestions(7);
+      
+      // Limpiar y reiniciar las partículas de viento
+      const windContainer = document.querySelector('.wind-particles');
+      windContainer.innerHTML = '';
+      createWindParticles();
+      
+      // Actualizar la interfaz
+      updateProgress();
+      showQuestion();
+      
+      // Mostrar el contenedor de preguntas
+      document.getElementById('questionContainer').classList.remove('hidden');
+      document.getElementById('startScreen').classList.add('hidden');
+    }
+
+    // Iniciar el ejercicio
+    window.onload = function() {
+      selectRandomQuestions();
+      currentQuestionIndex = 0;
+      correctAnswers = 0;
+      totalQuestionsAnswered = 0;
+      createWindParticles();
+      showQuestion();
+    };
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js?v=5');
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js?v=5');
+      });
+    }
+  </script>
+</body>
+</html> 

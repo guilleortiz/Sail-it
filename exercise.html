@@ -2,9 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Ejercicio de Navegación</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1976d2">
   <style>
     body {
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -13,20 +18,41 @@
       min-height: 100vh;
       background-color: #f8fafc; /* bg-slate-50 */
       color: #334155; /* text-slate-700 */
+      -webkit-tap-highlight-color: transparent;
     }
     main {
       flex-grow: 1;
-      padding-top: 2rem;
-      padding-bottom: 2rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
     }
     header, footer {
         flex-shrink: 0;
     }
-    @media (min-width: 768px) {
+    /* Improved touch targets for mobile */
+    button, 
+    a {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Prevent text size adjustment on orientation change */
+    @media screen and (max-width: 768px) {
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
       #exercise-content {
-        max-width: none !important;
-        width: 100% !important;
-        padding: 2.5rem 3rem !important;
+        padding: 1rem !important;
+      }
+    }
+    @media (min-width: 768px) {
+      main {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+      }
+      #exercise-content {
+        padding: 2rem !important;
       }
     }
   </style>
@@ -34,39 +60,206 @@
 <body class="bg-slate-50 text-slate-700">
 
   <header class="bg-sky-700 shadow-sm">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-      <h1 id="exercise-page-title" class="text-xl md:text-2xl font-bold text-white">Ejercicio</h1>
-      <a href="index.html" class="text-sm sm:text-base text-white hover:text-sky-100 font-medium px-3 py-2 sm:px-4 sm:py-2 rounded-md border border-white hover:bg-sky-600 transition-colors">&larr; Volver al Manual</a>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+      <h1 id="exercise-page-title" class="text-lg sm:text-xl md:text-2xl font-bold text-white">Ejercicio</h1>
+      <a href="index.html" class="w-full sm:w-auto text-sm sm:text-base text-white hover:text-sky-100 font-medium px-3 py-2 sm:px-4 sm:py-2 rounded-md border border-white hover:bg-sky-600 transition-colors text-center">&larr; Volver al Manual</a>
     </div>
   </header>
 
   <main class="max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8">
-    <div id="exercise-content" class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
-      <h2 id="exercise-topic-heading" class="text-2xl sm:text-3xl font-semibold text-slate-800 mb-6">Cargando ejercicio...</h2>
+    <div id="exercise-content" class="bg-white rounded-lg shadow-lg">
+      <h2 id="exercise-topic-heading" class="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 mb-4 sm:mb-6">Cargando ejercicio...</h2>
       <p id="exercise-description" class="text-slate-600 leading-relaxed text-sm sm:text-base">
         Por favor, espera mientras cargamos el contenido del ejercicio.
       </p>
       <!-- Actual exercise content would go here -->
-      <div class="mt-8 pt-6 border-t border-slate-200">
-        <p class="text-sm text-slate-500">Este es un ejercicio de ejemplo. En una aplicación real, aquí encontrarías preguntas interactivas, simulaciones o problemas a resolver relacionados con el tema.</p>
+      <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-200">
+        <p class="text-xs sm:text-sm text-slate-500">Este es un ejercicio de ejemplo. En una aplicación real, aquí encontrarías preguntas interactivas, simulaciones o problemas a resolver relacionados con el tema.</p>
       </div>
     </div>
   </main>
 
   <footer class="bg-slate-100 border-t border-slate-200 mt-auto">
-    <div class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+    <div class="max-w-4xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8 text-center">
       <p class="text-xs text-slate-500">© ${new Date().getFullYear()} Sailut. Todos los derechos reservados.</p>
     </div>
   </footer>
 
   <script>
+    // Variables globales para el ejercicio de características del buque
+    let selectedOptions = new Set();
+    let caracteristicas = [];
+    let container;
+
+    function handleCaracteristicaSelection(id) {
+      const checkbox = document.querySelector(`input[type="checkbox"][data-id="${id}"]`);
+      if (checkbox.checked) {
+        selectedOptions.add(id);
+      } else {
+        selectedOptions.delete(id);
+      }
+    }
+
+    function checkAnswers() {
+      const correctAnswers = caracteristicas.filter(c => c.isCorrect).map(c => c.id);
+      const incorrectAnswers = caracteristicas.filter(c => !c.isCorrect).map(c => c.id);
+      
+      let score = 0;
+      let allCorrect = true;
+      let missingCorrect = [];
+
+      // Verificar respuestas correctas seleccionadas
+      correctAnswers.forEach(id => {
+        if (selectedOptions.has(id)) {
+          score++;
+        } else {
+          allCorrect = false;
+          // Guardar las opciones correctas que faltan con su descripción
+          const missingOption = caracteristicas.find(c => c.id === id);
+          missingCorrect.push({
+            name: missingOption.name,
+            description: missingOption.description
+          });
+        }
+      });
+
+      // Verificar respuestas incorrectas seleccionadas
+      incorrectAnswers.forEach(id => {
+        if (selectedOptions.has(id)) {
+          allCorrect = false;
+        }
+      });
+
+      // Actualizar el estilo de las opciones
+      document.querySelectorAll('.caracteristica-option').forEach(option => {
+        const id = option.dataset.id;
+        const checkbox = option.querySelector('.caracteristica-checkbox');
+        const isCorrect = caracteristicas.find(c => c.id === id).isCorrect;
+        const wasSelected = selectedOptions.has(id);
+
+        if (isCorrect && wasSelected) {
+          // Opciones correctas seleccionadas en verde
+          option.classList.add('bg-green-50', 'border-green-200');
+          option.classList.remove('hover:bg-slate-50', 'selected');
+          checkbox.classList.add('bg-green-600', 'border-green-600');
+          checkbox.classList.remove('bg-sky-600', 'border-sky-600', 'border-slate-300');
+        } else if (!isCorrect) {
+          // Todas las opciones incorrectas en rojo
+          option.classList.add('bg-red-50', 'border-red-200');
+          option.classList.remove('hover:bg-slate-50', 'selected');
+          checkbox.classList.add('bg-red-600', 'border-red-600');
+          checkbox.classList.remove('bg-sky-600', 'border-sky-600', 'border-slate-300');
+        } else if (isCorrect && !wasSelected) {
+          // Opciones correctas no seleccionadas en amarillo
+          option.classList.add('bg-yellow-50', 'border-yellow-200');
+          option.classList.remove('hover:bg-slate-50', 'selected');
+          checkbox.classList.add('bg-yellow-600', 'border-yellow-600');
+          checkbox.classList.remove('bg-sky-600', 'border-sky-600', 'border-slate-300');
+        }
+        option.style.pointerEvents = 'none';
+      });
+
+      // Mostrar mensaje de resultado
+      const resultMessage = document.createElement('div');
+      resultMessage.className = `mt-6 p-4 rounded-lg text-center ${
+        allCorrect ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+      }`;
+      
+      let messageText = '';
+      if (allCorrect) {
+        messageText = '¡Enhorabuena! Has identificado correctamente todas las características esenciales.';
+      } else {
+        messageText = 'Hay selecciones incorrectas. Las opciones en rojo no son características esenciales.';
+        if (missingCorrect.length > 0) {
+          messageText += '<br><br>Te faltó seleccionar:';
+          missingCorrect.forEach(option => {
+            messageText += `<br><strong>${option.name}:</strong> ${option.description}`;
+          });
+        }
+      }
+
+      resultMessage.innerHTML = `<p class="text-lg font-medium">${messageText}</p>`;
+
+      // Insertar el mensaje antes del botón
+      const buttonContainer = document.querySelector('.mt-8');
+      buttonContainer.parentNode.insertBefore(resultMessage, buttonContainer);
+
+      // Cambiar el texto del botón
+      const button = document.querySelector('button');
+      button.textContent = 'Volver a empezar';
+      button.onclick = () => location.reload();
+    }
+
+    function showExercise() {
+      if (!container) {
+        console.error('Container element not found');
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="flex flex-col items-center px-4 sm:px-6">
+          <div class="w-full max-w-3xl mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+              <h3 class="text-xl sm:text-2xl font-semibold text-slate-800 mb-4">Características del Buque</h3>
+              <p class="text-sm sm:text-base text-slate-600 mb-6">
+                Selecciona las características que consideres esenciales para que un buque sea considerado como tal.
+              </p>
+              
+              <div class="space-y-3">
+                ${caracteristicas.map((caracteristica, index) => `
+                  <div class="flex items-center p-3 border rounded-lg hover:bg-slate-50 transition-colors cursor-pointer caracteristica-option" data-id="${caracteristica.id}">
+                    <div class="w-4 h-4 border-2 border-slate-300 rounded mr-3 flex-shrink-0 caracteristica-checkbox"></div>
+                    <span class="text-sm sm:text-base font-medium text-slate-900">${caracteristica.name}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <div class="mt-8 flex justify-center">
+                <button 
+                  id="check-answers-btn"
+                  class="px-6 py-3 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors text-sm sm:text-base"
+                >
+                  Comprobar Respuestas
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Agregar event listeners para las opciones
+      document.querySelectorAll('.caracteristica-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+          const checkbox = option.querySelector('.caracteristica-checkbox');
+          const isSelected = option.classList.contains('selected');
+          
+          if (isSelected) {
+            // Deseleccionar
+            option.classList.remove('selected');
+            checkbox.classList.remove('bg-sky-600', 'border-sky-600');
+            checkbox.classList.add('border-slate-300');
+            selectedOptions.delete(option.dataset.id);
+          } else {
+            // Seleccionar
+            option.classList.add('selected');
+            checkbox.classList.add('bg-sky-600', 'border-sky-600');
+            checkbox.classList.remove('border-slate-300');
+            selectedOptions.add(option.dataset.id);
+          }
+        });
+      });
+
+      // Agregar event listener para el botón de comprobar respuestas
+      document.getElementById('check-answers-btn').addEventListener('click', checkAnswers);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
       const topicSlug = params.get('topic');
       const exercisePageTitleElement = document.getElementById('exercise-page-title');
       const topicHeadingElement = document.getElementById('exercise-topic-heading');
       const descriptionElement = document.getElementById('exercise-description');
-      const container = document.getElementById('exercise-content');
+      container = document.getElementById('exercise-content');
 
       function formatTopicName(slug) {
         if (!slug) return "Desconocido";
@@ -82,22 +275,104 @@
         topicHeadingElement.textContent = `Ejercicio sobre: ${formattedTopic}`;
         descriptionElement.textContent = `Aquí encontrarás un ejercicio interactivo relacionado con ${formattedTopic}. Completa las tareas y preguntas para poner a prueba tus conocimientos.`;
 
-        // --- Ejercicio interactivo de rumbos ---
+        // --- Ejercicio de características del buque ---
+        if (topicSlug === 'caracteristicas-del-buque') {
+          const allCaracteristicas = [
+            {
+              id: 'flotabilidad',
+              name: 'Flotabilidad',
+              description: 'Capacidad de un cuerpo para mantenerse a flote en el agua.',
+              isCorrect: true
+            },
+            {
+              id: 'estanqueidad',
+              name: 'Ser estanco',
+              description: 'Capacidad de mantener el agua fuera del buque, evitando filtraciones.',
+              isCorrect: true
+            },
+            {
+              id: 'habitabilidad',
+              name: 'Ser Habitable',
+              description: 'Condiciones adecuadas para que las personas puedan vivir y trabajar a bordo.',
+              isCorrect: true
+            },
+            {
+              id: 'navegabilidad',
+              name: 'Navegabilidad',
+              description: 'Capacidad de moverse por el agua de manera controlada y segura.',
+              isCorrect: true
+            },
+            {
+              id: 'estabilidad',
+              name: 'Poseer estabilidad',
+              description: 'Capacidad de mantener el equilibrio y recuperarse de la inclinación.',
+              isCorrect: true
+            },
+            {
+              id: 'velocidad',
+              name: 'Velocidad mínima de 2 nudos',
+              isCorrect: false
+            },
+            {
+              id: 'motor',
+              name: 'Poseer un motor fuera borda',
+              isCorrect: false
+            },
+            {
+              id: 'tripulantes',
+              name: 'Capacidad minima de 3 tripulantes',
+              isCorrect: false
+            },
+            {
+              id: 'ancla',
+              name: 'Poseer ancla',
+              isCorrect: false
+            },
+            {
+              id: 'quilla',
+              name: 'Tener quilla',
+              isCorrect: false
+            },
+            {
+              id: 'camarote',
+              name: 'Poseer camarote',
+              isCorrect: false
+            }
+          ];
+
+          // Seleccionar 5 opciones aleatorias, asegurando al menos 2 correctas
+          const correctOptions = allCaracteristicas.filter(c => c.isCorrect);
+          const incorrectOptions = allCaracteristicas.filter(c => !c.isCorrect);
+          
+          const selectedCorrect = correctOptions.sort(() => 0.5 - Math.random()).slice(0, 2);
+          const selectedIncorrect = incorrectOptions.sort(() => 0.5 - Math.random()).slice(0, 3);
+          
+          caracteristicas = [...selectedCorrect, ...selectedIncorrect].sort(() => 0.5 - Math.random());
+          selectedOptions = new Set();
+
+          showExercise();
+        }
+
+        // --- Ejercicio de rumbos ---
         if (topicSlug === 'rumbos') {
           const rumbos = [
-            { name: 'Por la amura', pos: 0 },
-            { name: 'A un descuartelar', pos: 1 },
-            { name: 'Por el través', pos: 2 },
-            { name: 'A un largo', pos: 3 },
-            { name: 'Por la aleta', pos: 4 }
+            { name: 'Por la popa', angle: 90, pos: 0 },            // antes 0
+            { name: 'Por la aleta', angle: 135, pos: 1 },          // antes 45
+            { name: 'A un largo', angle: 157.5, pos: 2 },          // antes 67.5
+            { name: 'Por el través', angle: 180, pos: 3 },         // antes 90
+            { name: 'A un descuartelar', angle: 202.5, pos: 4 },   // antes 112.5
+            { name: 'Por la amura', angle: 225, pos: 5 },          // antes 135
+            { name: 'Por la proa', angle: 270, pos: 6 }            // antes 180 → ahora apunta hacia arriba
           ];
           
-          let currentRumboIndex = 0;
+          // Crear un array aleatorio de índices para las preguntas
+          let questionOrder = [...Array(rumbos.length).keys()].sort(() => Math.random() - 0.5);
+          let currentQuestionIndex = 0;
           let correctAnswers = 0;
           let totalQuestions = rumbos.length;
 
           function showNextRumbo() {
-            if (currentRumboIndex >= rumbos.length) {
+            if (currentQuestionIndex >= questionOrder.length) {
               // Mostrar pantalla de finalización
               container.innerHTML = `
                 <div class="flex flex-col items-center justify-center py-8 sm:py-16 px-4">
@@ -111,6 +386,7 @@
               return;
             }
 
+            const currentRumboIndex = questionOrder[currentQuestionIndex];
             const currentRumbo = rumbos[currentRumboIndex];
             // Mezclar las opciones
             const options = [...rumbos].sort(() => Math.random() - 0.5);
@@ -122,19 +398,18 @@
                     <h3 class="text-xl sm:text-2xl font-semibold text-slate-800 mb-2 text-center">${currentRumbo.name}</h3>
                     <p class="text-sm sm:text-base text-slate-600 text-center mb-4">Selecciona la posición correcta en el diagrama</p>
                     <div class="mt-4 text-center text-xs sm:text-sm text-slate-500">
-                      Pregunta ${currentRumboIndex + 1} de ${totalQuestions}
+                      Pregunta ${currentQuestionIndex + 1} de ${totalQuestions}
                     </div>
                   </div>
                 </div>
 
                 <div class="relative w-full max-w-[320px] sm:max-w-[520px] aspect-square mx-auto" id="rosa-rumbos">
-                  <svg viewBox="0 0 520 520" width="100%" height="100%" style="max-width: 100%; touch-action: none;">
+                  <svg viewBox="0 300 520 520" width="100%" height="100%" style="max-width: 100%; touch-action: none;">
                     <g id="rumbos-zones">
                       ${(() => {
-                        const angles = [-90, -45, 0, 45, 90];
                         return rumbos.map((r, i) => {
-                          const angle = angles[i];
-                          const rad = angle * Math.PI / 180;
+                          const angle = r.angle;
+                          const rad = (angle - 90) * Math.PI / 180; // Ajustamos el ángulo para que 0° esté arriba
                           const cx = 260;
                           const cy = 260;
                           const x1 = cx + Math.cos(rad) * 90;
@@ -160,11 +435,11 @@
                         }).join('');
                       })()}
                     </g>
-                    <g id="velero">
-                      <image href="assets/velero.png" x="185" y="120" width="150" height="300" />
+                    <g id="velero-container">
+                      <image href="assets/rumbo.png" x="185" y="110" width="150" height="300" />
                     </g>
                     <defs>
-                      ${[0,1,2,3,4].map(i => `
+                      ${[0,1,2,3,4,5,6].map(i => `
                         <marker id="arrowhead${i}" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto" markerUnits="strokeWidth">
                           <polygon points="0,0 6,3 0,6" fill="#0ea5e9" />
                         </marker>
@@ -187,6 +462,7 @@
           }
 
           function handleRumboSelection(selectedPos) {
+            const currentRumboIndex = questionOrder[currentQuestionIndex];
             const correctPos = rumbos[currentRumboIndex].pos;
             const feedback = document.getElementById('feedback');
             const circles = document.querySelectorAll('.rumbo-option');
@@ -200,10 +476,11 @@
                   feedback.textContent = '¡Correcto!';
                   feedback.className = 'mt-4 text-center text-lg font-medium text-green-600';
                   correctAnswers++;
+                  // Mostrar feedback verde por 800ms antes de continuar
                   setTimeout(() => {
-                    currentRumboIndex++;
+                    currentQuestionIndex++;
                     showNextRumbo();
-                  }, 1000);
+                  }, 800);
                 } else {
                   circle.setAttribute('fill', '#ef4444');
                   circle.setAttribute('stroke', '#dc2626');
@@ -318,12 +595,42 @@
           nextCard();
         }
 
+        // --- Ejercicio de nudos ---
+        if (topicSlug === 'nudos') {
+          container.innerHTML = `
+            <div class="flex flex-col items-center px-4 sm:px-6">
+              <div class="w-full max-w-3xl mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                  <h3 class="text-xl sm:text-2xl font-semibold text-slate-800 mb-4">Ejercicio de Nudos</h3>
+                  <div class="text-center">
+                    <p class="text-lg text-slate-600 mb-6">
+                      Este ejercicio estará disponible próximamente. ¡Vuelve pronto!
+                    </p>
+                    <div class="flex justify-center mb-6">
+                      <img src="assets/knot.gif" alt="Nudo animado" class="w-64 h-64 object-contain" />
+                    </div>
+                
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
       } else {
         if (exercisePageTitleElement) exercisePageTitleElement.textContent = 'Error';
         if (topicHeadingElement) topicHeadingElement.textContent = 'Tema de ejercicio no especificado';
         if (descriptionElement) descriptionElement.textContent = 'No se pudo cargar el ejercicio. Por favor, vuelve al manual y selecciona un tema.';
       }
     });
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js?v=4');
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js?v=4');
+      });
+    }
   </script>
 </body>
 </html>
