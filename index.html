@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="-1">
+  <link rel="icon" href="assets/sailboat-192x192.png" type="image/png" />
+  <title>Ejercicios de Navegación</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1976d2">
+  <style>
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
+    }
+    main {
+      flex-grow: 1;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    /* Improved touch targets for mobile */
+    .mobile-nav-link, 
+    button, 
+    a {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Prevent text size adjustment on orientation change */
+    @media screen and (max-width: 768px) {
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+    }
+  </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-slate-50 text-slate-700">
+
+  <header class="bg-slate-100 shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="#inicio" class="flex items-center" aria-label="Sail-it - Página de inicio">
+          ${getSailboatLogoIconSVG()}
+          <span class="ml-2 text-lg sm:text-xl font-bold text-slate-800">Sail-it</span>
+        </a>
+        <nav class="hidden md:flex items-center space-x-4 lg:space-x-6" aria-label="Navegación principal">
+          ${navLinksData.map(link => `
+            <a href="${link.href}" class="text-slate-600 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+              ${link.label}
+            </a>
+          `).join('')}
+        </nav>
+        <div class="md:hidden flex items-center">
+          <button id="mobile-menu-button" type="button" class="text-slate-700 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500 p-2 rounded-md" aria-label="Abrir menú principal" aria-expanded="false" aria-controls="mobile-menu">
+            ${getMenuIconSVG()}
+          </button>
+        </div>
+      </div>
+    </div>
+    <nav id="mobile-menu" class="md:hidden bg-slate-100 hidden" aria-label="Navegación móvil">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        ${navLinksData.map(link => `
+          <a href="${link.href}" class="text-slate-600 hover:text-sky-700 hover:bg-slate-200 block px-3 py-3 rounded-md text-base font-medium transition-colors mobile-nav-link">
+            ${link.label}
+          </a>
+        `).join('')}
+        <a href="react-refactor/sail-it/index.html" target="_blank" class="block w-full text-center bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-md px-3 py-3 mt-2 transition-colors mobile-nav-link">Nueva web</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div id="hero-section-container">
+      <div 
+        id="inicio"
+        class="relative bg-cover bg-center h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[calc(100vh-4rem)] flex items-center"
+        style="background-image: url('assets/sailboat.png');"
+        role="banner"
+      >
+        <div class="absolute inset-0 bg-black opacity-30" aria-hidden="true"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div class="md:w-1/2">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+              Ejercicios de<br />Navegación
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="temas" class="py-8 sm:py-12 md:py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="temas-heading">
+      <h2 id="temas-heading" class="sr-only">Temas de Navegación</h2>
+      <div id="info-cards-container" class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+        <a href="exercise.html" class="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
+          <div class="flex flex-col items-center text-center">
+            ${getRudderIconSVG()}
+            <h3 class="text-lg sm:text-xl font-semibold text-slate-800 mb-2">Maniobras</h3>
+            <p class="text-slate-600 text-sm sm:text-base">Aprende sobre las maniobras básicas de navegación y cómo ejecutarlas correctamente.</p>
+          </div>
+        </a>
+        <a href="elementos-del-barco.html" class="group block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 relative">
+          <div class="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-md">
+            NUEVO
+          </div>
+          <div class="flex flex-col items-center text-center">
+            ${getSailboatIconSVG()}
+            <h3 class="text-lg sm:text-xl font-semibold text-slate-800 mb-2">Elementos del Barco</h3>
+            <p class="text-slate-600 text-sm sm:text-base">Conoce los diferentes elementos que componen un barco y sus funciones.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-100 border-t border-slate-200 py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center text-sm text-slate-600">
+        <p>© 2024 Sail-it. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // --- SVG Icon Function Definitions ---
+    function getSailboatLogoIconSVG(className = "h-8 w-8 text-sky-700") {
+      return `
+        <svg 
+          class="${className}"
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M22 18.5l-2-4H4l-2 4h20zM3.5 14.5L12 3l8.5 11.5"/>
+          <path d="M12 3v11.5"/>
+        </svg>`;
+    }
+
+    function getMenuIconSVG(className = "h-6 w-6") {
+      return `
+        <svg 
+          class="${className}"
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>`;
+    }
+    
+    function getRudderIconSVG(className = "w-16 h-16 mb-4") {
+      return `<img src="assets/rudder.png" alt="Timón" class="${className}">`;
+    }
+
+    function getSailboatIconSVG(className = "w-16 h-16 text-sky-600 mb-4") {
+      return `
+        <svg 
+          class="${className}"
+          viewBox="0 0 64 64" 
+          fill="none" 
+          aria-hidden="true"
+        >
+          <path d="M18 50 C 18 50, 46 50, 46 50 C 46 50, 44 44, 40 44 L 24 44 C 24 44, 20 44, 18 50 Z" stroke="currentColor" stroke-width="2.5" fill="currentColor" fill-opacity="0.1"/>
+          <path d="M22 44 L 32 14 L 42 44" stroke="currentColor" stroke-width="2.5" fill="currentColor" fill-opacity="0.1" />
+          <line x1="32" y1="14" x2="32" y2="44" stroke="currentColor" stroke-width="2.5"/>
+        </svg>`;
+    }
+
+    function getTwinSailboatsIconSVG(className = "w-16 h-16 text-sky-600 mb-4") {
+      return `
+        <svg 
+          class="${className}"
+          viewBox="0 0 64 64" 
+          fill="none"
+          aria-hidden="true"
+        >
+          <path d="M20 52 C 20 52, 42 52, 42 52 C 42 52, 40 47, 37 47 L 25 47 C 25 47, 22 47, 20 52 Z" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity="0.1"/>
+          <path d="M23 47 L 31 20 L 39 47" stroke="currentColor" stroke-width="2" fill="currentColor" fill-opacity="0.1"/>
+          <line x1="31" y1="20" x2="31" y2="47" stroke="currentColor" stroke-width="2"/>
+          <path d="M38 48 C 38 48, 54 48, 54 48 C 54 48, 52.5 44, 50 44 L 40 44 C 40 44, 39 44, 38 48 Z" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.05"/>
+          <path d="M41 44 L 47 25 L 53 44" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="47" y1="25" x2="47" y2="44" stroke="currentColor" stroke-width="1.5"/>
+        </svg>`;
+    }
+
+    function getKnotIconSVG(className = "w-12 h-12 mb-4 mx-auto mt-4") {
+      return `<img src="assets/knot.png" alt="Nudo" class="${className}">`;
+    }
+
+    function getRumboIconSVG(className = "w-16 h-16 mb-4 mx-auto") {
+      return `<img src="assets/rumbo.png" alt="Rumbo" class="${className}">`;
+    }
+
+    function getRumbosIconSVG(className = "w-16 h-16 text-sky-600 mb-4") {
+      // SVG de rosa de los vientos estilizada para representar rumbos
+      return `
+        <svg class="${className}" 
+        viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="2.5" fill="currentColor" fill-opacity="0.05"/>
+          <polygon points="32,10 36,32 32,54 28,32" fill="currentColor" fill-opacity="0.4"/>
+          <polygon points="10,32 32,36 54,32 32,28" fill="currentColor" fill-opacity="0.2"/>
+          <circle cx="32" cy="32" r="4" fill="currentColor" fill-opacity="0.7"/>
+        </svg>
+      `;
+    }
+
+    function getShipIconSVG(className = "w-16 h-16 text-sky-600 mb-4") {
+      return `
+        <svg 
+          class="${className}"
+          viewBox="0 0 64 64" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2.5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M10 40 L54 40" />
+          <path d="M20 40 L20 20 L44 20 L44 40" />
+          <path d="M32 20 L32 10" />
+          <path d="M24 40 L24 50 L40 50 L40 40" />
+        </svg>`;
+    }
+
+    function generateTopicSlug(title) {
+      if (!title) return '';
+      // More robust slug generation
+      let slug = title
+        .toString() // Ensure it's a string
+        .toLowerCase() // Convert to lowercase
+        .normalize("NFD") // Decompose accented characters (e.g., é -> e + ´)
+        .replace(/[\u0300-\u036f]/g, "") // Remove diacritical marks
+        .replace(/[^\w\s-]/g, '') // Remove non-alphanumeric (excluding whitespace and hyphen)
+        .trim() // Trim leading/trailing whitespace
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-'); // Replace multiple hyphens with a single hyphen
+      // console.log(`Generated slug for "${title}": "${slug}"`);
+      return slug;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log("DOM fully loaded. Initializing page content...");
+      const headerContainer = document.querySelector('header');
+      const navLinksData = [
+        { href: '#inicio', label: 'Inicio' },
+        { href: '#temas', label: 'Temas' },
+        { href: '#acerca-de', label: 'Acerca de' },
+        { href: "react-refactor/sail-it/index.html", label: 'Nueva web' },
+      ];
+      console.log("Navigation links data:", navLinksData.map(link => link.href));
+
+
+      if (headerContainer) {
+        headerContainer.innerHTML = `
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+              <a href="#inicio" class="flex items-center" aria-label="Sail-it - Página de inicio">
+                ${getSailboatLogoIconSVG()}
+                <span class="ml-2 text-xl font-bold text-slate-800">Sail-it</span>
+              </a>
+              <nav class="hidden md:flex items-center space-x-6" aria-label="Navegación principal">
+                ${navLinksData.map(link => `
+                  <a href="${link.href}" class="text-slate-600 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                    ${link.label}
+                  </a>
+                `).join('')}
+              </nav>
+              <div class="md:hidden flex items-center">
+                <button id="mobile-menu-button" type="button" class="text-slate-700 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500 p-2 rounded-md" aria-label="Abrir menú principal" aria-expanded="false" aria-controls="mobile-menu">
+                  ${getMenuIconSVG()}
+                </button>
+              </div>
+            </div>
+          </div>
+          <nav id="mobile-menu" class="md:hidden bg-slate-100 hidden" aria-label="Navegación móvil">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              ${navLinksData.map(link => `
+                <a href="${link.href}" class="text-slate-600 hover:text-sky-700 hover:bg-slate-200 block px-3 py-2 rounded-md text-base font-medium transition-colors mobile-nav-link">
+                  ${link.label}
+                </a>
+              `).join('')}
+            </div>
+          </nav>
+        `;
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuButton && mobileMenu) {
+          mobileMenuButton.addEventListener('click', () => {
+            const isMenuHidden = mobileMenu.classList.toggle('hidden');
+            mobileMenuButton.setAttribute('aria-expanded', String(!isMenuHidden));
+          });
+          document.querySelectorAll('#mobile-menu .mobile-nav-link').forEach(link => {
+              link.addEventListener('click', () => {
+                  mobileMenu.classList.add('hidden');
+                  mobileMenuButton.setAttribute('aria-expanded', 'false');
+              });
+          });
+        }
+      }
+
+      const heroSectionContainer = document.getElementById('hero-section-container');
+      if (heroSectionContainer) {
+        heroSectionContainer.innerHTML = `
+          <div 
+            id="inicio"
+            class="relative bg-cover bg-center h-[50vh] md:h-[60vh] lg:h-[calc(100vh-4rem)] flex items-center"
+            style="background-image: url('assets/sailboat.png');"
+            role="banner"
+          >
+            <div class="absolute inset-0 bg-black opacity-30" aria-hidden="true"></div>
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+              <div class="md:w-1/2">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight">
+                  Ejercicios de<br />Navegación
+                </h1>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      
+      const cardDataItems = [
+        { id: '1', iconFn: getRumbosIconSVG, title: 'Rumbos', description: 'Nombre de los rumbos segun el viento.', href: 'exercise.html?topic=rumbos' },
+        { id: '2', iconFn: getSailboatIconSVG, title: 'Elementos del Barco', description: 'Conoce los diferentes elementos que componen un barco y sus funciones.', href: 'elementos-del-barco.html' },
+        { id: '3', iconFn: getRudderIconSVG, title: 'Maniobras', description: 'Las diferentes maniobras de navegación.', href: 'exercise.html?topic=maniobras' },
+        { id: '4', iconFn: getShipIconSVG, title: 'Características del Buque', description: 'Aprende las características esenciales que debe tener un buque.', href: 'exercise.html?topic=caracteristicas-del-buque' },
+        { id: '5', iconFn: getKnotIconSVG, title: 'Nudos', description: 'Conocer los nudos de los cabos.', href: 'exercise.html?topic=nudos' }
+      ];
+      const infoCardsContainer = document.getElementById('info-cards-container');
+      if (infoCardsContainer) {
+        let infoCardsHTML = '';
+        console.log("Generating info cards. Base URL for exercises: exercise.html");
+        cardDataItems.forEach(card => {
+          const topicSlug = generateTopicSlug(card.title);
+          const cardHref = card.href || `exercise.html?topic=${topicSlug}`;
+          console.log(`  Card: "${card.title}", Slug: "${topicSlug}", Href: "${cardHref}"`);
+          
+          // Agregar label "NUEVO" solo para "Elementos del Barco"
+          const nuevoLabel = card.title === 'Elementos del Barco' ? 
+            '<div class="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold px-3 py-2 rounded-md">NUEVO</div>' : '';
+          
+          infoCardsHTML += `
+            <a href="${cardHref}" 
+               aria-label="Ver ejercicio sobre ${card.title}"
+               class="block bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 relative">
+              ${nuevoLabel}
+              <article class="flex flex-col items-center text-center">
+                <div class="mb-4">${card.iconFn()}</div>
+                <h3 class="text-xl font-semibold text-slate-800 mb-2">${card.title}</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">${card.description}</p>
+              </article>
+            </a>
+          `;
+        });
+        infoCardsContainer.innerHTML = infoCardsHTML;
+        
+      }
+
+      const footerContainer = document.querySelector('footer');
+      if (footerContainer) {
+        footerContainer.innerHTML = `
+          <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
+            <div>
+              <h4 id="acerca-de" class="text-md font-semibold text-slate-800 mb-2 sm:mb-0">Enlaces</h4>
+              <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 mt-1 sm:mt-0">
+                <a href="#privacidad" class="text-sm text-slate-600 hover:text-sky-700 transition-colors">Privacidad</a>
+                <a href="#contacto" class="text-sm text-slate-600 hover:text-sky-700 transition-colors">Contacto</a>
+              </div>
+            </div>
+            <div class="mt-4 sm:mt-0 text-xs text-slate-500">
+              © Sail-it. Todos los derechos reservados.
+            </div>
+          </div>
+        `;
+      }
+      console.log("Page initialization complete.");
+    });
+  </script>
+<script type="module" src="/index.tsx"></script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+  import { getAnalytics, logEvent} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDeKxMrhJ6Vv-m7Z5uEebSSXGMEn3fF2Rk",
+    authDomain: "sail-it.firebaseapp.com",
+    projectId: "sail-it",
+    storageBucket: "sail-it.firebasestorage.app",
+    messagingSenderId: "521943361053",
+    appId: "1:521943361053:web:42cfe89331ab978f22c8f4",
+    measurementId: "G-6VES6YM7TB"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  
+  // Make analytics available globally for use in other scripts
+  window.firebaseAnalytics = analytics;
+  
+  // Add event listeners after DOM is loaded and cards are created
+  document.addEventListener('DOMContentLoaded', () => {
+    // Wait a bit for the main script to finish creating the cards
+    setTimeout(() => {
+      const infoCardsContainer = document.getElementById('info-cards-container');
+      if (infoCardsContainer) {
+        infoCardsContainer.querySelectorAll('a').forEach(cardEl => {
+          cardEl.addEventListener('click', () => {
+            const titleEl = cardEl.querySelector('h3');
+            const exerciseName = titleEl?.innerText || 'unknown';
+            
+            console.log(`Card ${exerciseName} clicked`);
+            logEvent(analytics, ${exerciseName}, {
+              exercise_name: exerciseName,
+              source: 'main_menu'
+            });
+          });
+        });
+      }
+    }, 100); // Small delay to ensure cards are created
+  });
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js?v=5');
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js?v=5');
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+/* Wind Particles */
+.wind-particles {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  overflow: visible;
+}
+.wind-particles.active {
+  opacity: 1;
+}
+.wind-particle {
+  position: absolute;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(to right, 
+    rgba(147, 197, 253, 0) 0%,
+    rgba(147, 197, 253, 0.4) 20%,
+    rgba(147, 197, 253, 0.8) 50%,
+    rgba(147, 197, 253, 0.4) 80%,
+    rgba(147, 197, 253, 0) 100%
+  );
+  border-radius: 2px;
+  left: 0;
+  transform-origin: center;
+  filter: blur(0.5px);
+  will-change: transform;
+  animation-duration: 14s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+@keyframes wind-right-bar {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.8;
+  }
+  95% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+@keyframes wind-left-bar {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.8;
+  }
+  95% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+}
+.wind-particles.wind-left .wind-particle {
+  animation: wind-left 14s linear 1;
+  animation-fill-mode: forwards;
+}
+.wind-left .wind-particle,
+.wind-left-particle {
+  animation: wind-left 14s linear 1 !important;
+}
+
+/* ProgressBar & Boat */
+.progress-container {
+  width: 100%;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+  position: relative;
+  height: 1.5rem;
+  min-height: 3.5rem;
+  overflow: visible;
+}
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  transition: width 2s ease-in-out;
+  position: relative;
+  z-index: 1;
+}
+.boat {
+  position: absolute;
+  top: -1rem;
+  left: 0;
+  width: 5rem;
+  height: 4rem;
+  transition: left 2s ease-in-out;
+  transform: translateX(-50%);
+  z-index: 30;
+}
+.boat svg {
+  width: 100%;
+  height: 100%;
+}
+.buoy {
+  z-index: 10;
+  position: relative;
+}
+
+/* Quiz feedback */
+.option.correct {
+  background-color: #dcfce7;
+  border-color: #86efac;
+  color: #166534;
+}
+.option.incorrect {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+  animation: shake 0.5s ease-in-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+.feedback.correct {
+  background-color: #dcfce7;
+  color: #166534;
+}
+.feedback.incorrect {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.option {
+  border: 1.5px solid #cbd5e1; /* gris slate-300 */
+  border-radius: 0.5rem;
+} 
