@@ -1,9 +1,9 @@
 {
   "hosting": {
-    "public":  "public/react-refactor/sail-it/dist",
+    "public": "public/react-refactor/sail-it/dist",
     "ignore": [
-      "**/.*",
-      "**/node_modules/**"
+      "*/.",
+      "*/node_modules/*"
     ],
     "redirects": [
       {
@@ -14,6 +14,31 @@
       {
         "source": "/elementos-del-barco.html",
         "destination": "/elementos-del-barco",
+        "type": 301
+      },
+      {
+        "source": "/maniobras.html",
+        "destination": "/exercise?topic=maniobras",
+        "type": 301
+      },
+      {
+        "source": "/nudos.html",
+        "destination": "/exercise?topic=nudos",
+        "type": 301
+      },
+      {
+        "source": "/caracteristicas-del-buque.html",
+        "destination": "/exercise?topic=caracteristicas-del-buque",
+        "type": 301
+      },
+      {
+        "source": "/rumbos.html",
+        "destination": "/exercise?topic=rumbos",
+        "type": 301
+      },
+      {
+        "source": "/tipos-de-motor.html",
+        "destination": "/exercise?topic=tipos-de-motor",
         "type": 301
       },
       {
@@ -30,7 +55,7 @@
     ],
     "headers": [
       {
-        "source": "**",
+        "source": "/index.html",
         "headers": [
           {
             "key": "Cache-Control",
@@ -41,7 +66,25 @@
             "value": "no-cache"
           }
         ]
+      },
+      {
+        "source": "**/*.js",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/javascript"
+          }
+        ]
+      },
+      {
+        "source": "**/*.css",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/css"
+          }
+        ]
       }
     ]
   }
-} 
+}
