@@ -21,6 +21,13 @@ function HomePage() {
 }
 
 function App() {
+  // useEffect(() => {
+  //   if (!sessionStorage.getItem('reloaded')) {
+  //     sessionStorage.setItem('reloaded', '1');
+  //     window.location.reload(true);
+  //   }
+  // }, []);
+
   return (
     <Router>
       <Routes>
