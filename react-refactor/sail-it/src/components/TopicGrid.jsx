@@ -5,7 +5,8 @@ import {
   SailboatIcon, 
   RudderIcon, 
   ShipIcon, 
-  KnotIcon 
+  KnotIcon,
+  MotorIcon
 } from './IconComponents';
 
 const TopicGrid = () => {
@@ -32,12 +33,19 @@ const TopicGrid = () => {
       href: '/exercise?topic=rumbos'
     },
     { 
+      id: '6', 
+      icon: MotorIcon, 
+      title: 'Tipos de Motor', 
+      description: 'Clasifica las características de motores a 2 tiempos y motores a 4 tiempos.',
+      href: '/exercise?topic=tipos-de-motor',
+      isNew: true
+    },
+    { 
       id: '2', 
       icon: SailboatIcon, 
       title: 'Elementos del Barco', 
       description: 'Conoce los diferentes elementos que componen un barco y sus funciones.',
-      href: '/elementos-del-barco',
-      isNew: true
+      href: '/elementos-del-barco'
     },
     { 
       id: '3', 

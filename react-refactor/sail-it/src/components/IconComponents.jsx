@@ -107,4 +107,9 @@ export const ShipIcon = ({ className = "w-16 h-16 text-sky-600 mb-4" }) => (
     <path d="M32 20 L32 10" />
     <path d="M24 40 L24 50 L40 50 L40 40" />
   </svg>
+);
+
+// Icono del motor
+export const MotorIcon = ({ className = "w-16 h-16 mb-4" }) => (
+  <img src="/assets/piston.png" alt="Motor" className={className} />
 ); 

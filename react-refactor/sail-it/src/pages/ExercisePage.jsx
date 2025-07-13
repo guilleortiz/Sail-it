@@ -6,6 +6,7 @@ import CaracteristicasBuqueExercise from '../components/exercises/Caracteristica
 import RumbosExercise from '../components/exercises/RumbosExercise';
 import ManiobrasExercise from '../components/exercises/ManiobrasExercise';
 import NudosExercise from '../components/exercises/NudosExercise';
+import TiposMotorExercise from '../components/exercises/TiposMotorExercise';
 
 const ExercisePage = () => {
   const [searchParams] = useSearchParams();
@@ -19,8 +20,6 @@ const ExercisePage = () => {
 
     if (topic) {
       const formattedTopic = formatTopicName(topic);
-      setExerciseTitle(`Ejercicio: ${formattedTopic}`);
-      setExerciseDescription(`Aquí encontrarás un ejercicio interactivo relacionado con ${formattedTopic}. Completa las tareas y preguntas para poner a prueba tus conocimientos.`);
     }
   }, [searchParams]);
 
@@ -42,6 +41,8 @@ const ExercisePage = () => {
         return <ManiobrasExercise />;
       case 'nudos':
         return <NudosExercise />;
+      case 'tipos-de-motor':
+        return <TiposMotorExercise />;
       default:
         return (
           <div className="bg-white rounded-lg shadow-lg p-6">
@@ -64,9 +65,7 @@ const ExercisePage = () => {
           <h2 id="exercise-topic-heading" className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-800 mb-6 sm:mb-8 px-6 pt-6">
             {exerciseTitle}
           </h2>
-          <p id="exercise-description" className="text-slate-600 leading-relaxed text-sm sm:text-base mb-6 px-6">
-            {exerciseDescription}
-          </p>
+         
           {renderExercise()}
         </div>
       </main>
