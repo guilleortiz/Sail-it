@@ -113,3 +113,18 @@ export const ShipIcon = ({ className = "w-16 h-16 text-sky-600 mb-4" }) => (
 export const MotorIcon = ({ className = "w-16 h-16 mb-4" }) => (
   <img src="/assets/piston.png" alt="Motor" className={className} />
 ); 
+
+// Icono del motor con partes (nuevo)
+export const BoatEngineIcon = ({ className = "w-16 h-16 mb-4" }) => (
+  <img src="/assets/boat-engine.png" alt="Motor fuera de borda" className={className} />
+); 
+
+// Icono de la hélice (nuevo)
+export const PropellerIcon = ({ className = "w-16 h-16 mb-4" }) => (
+  <img src="/assets/propeller.png" alt="Hélice" className={className} />
+); 
+
+// Icono del ancla (nuevo)
+export const AnchorIcon = ({ className = "w-16 h-16 mb-4" }) => (
+  <img src="/assets/anchor.png" alt="Ancla" className={className} />
+); 

@@ -1,6 +1,6 @@
 // Define el nombre de la caché. Es una buena práctica cambiar este nombre
 // cada vez que subes una nueva versión de la web para forzar la actualización.
-const CACHE_NAME = 'sailing-navigation-v6';
+const CACHE_NAME = 'sailing-navigation-v9';
 
 const urlsToCache = [
   '/',
@@ -35,9 +35,32 @@ self.addEventListener('fetch', event => {
   // Intercepta todas las peticiones de la red.
   // Primero busca el recurso en la caché. Si lo encuentra, lo devuelve.
   // Si no, lo busca en la red.
+  
+  // No interceptar peticiones a Firebase para evitar errores de CORS
+  if (event.request.url.includes('firebase.googleapis.com') || 
+      event.request.url.includes('googleapis.com') ||
+      event.request.url.includes('firebaseapp.com')) {
+    return;
+  }
+  
   event.respondWith(
     caches.match(event.request)
-      .then(response => response || fetch(event.request))
+      .then(response => {
+        // Si está en caché, devolverlo
+        if (response) {
+          return response;
+        }
+        
+        // Si no está en caché, intentar fetch de la red
+        return fetch(event.request).catch(error => {
+          console.log('Fetch failed:', error);
+          // Si es una petición de navegación, devolver la página principal
+          if (event.request.mode === 'navigate') {
+            return caches.match('/index.html');
+          }
+          return null;
+        });
+      })
   );
 });
 

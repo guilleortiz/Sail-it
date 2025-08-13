@@ -16,11 +16,11 @@ export default defineConfig({
             resolve(__dirname, 'public/service-worker.js'),
             resolve(__dirname, 'dist/service-worker.js')
           )
-          console.log('✅ Service Worker copiado a ')
+          console.log('✅ Service Worker copiado a dist/')
         } catch (error) {
           console.error('❌ Error copiando Service Worker:', error.message)
         }
       }
     }
-  ],
+  ]
 })
