@@ -7,6 +7,9 @@ import RumbosExercise from '../components/exercises/RumbosExercise';
 import ManiobrasExercise from '../components/exercises/ManiobrasExercise';
 import NudosExercise from '../components/exercises/NudosExercise';
 import TiposMotorExercise from '../components/exercises/TiposMotorExercise';
+import PartesMotorExercise from '../components/exercises/PartesMotorExercise';
+import PartesHeliceExercise from '../components/exercises/PartesHeliceExercise';
+import PartesAnclaExercise from '../components/exercises/PartesAnclaExercise';
 
 const ExercisePage = () => {
   const [searchParams] = useSearchParams();
@@ -43,6 +46,12 @@ const ExercisePage = () => {
         return <NudosExercise />;
       case 'tipos-de-motor':
         return <TiposMotorExercise />;
+      case 'partes-del-motor':
+        return <PartesMotorExercise />;
+      case 'partes-de-la-helice':
+        return <PartesHeliceExercise />;
+      case 'partes-del-ancla':
+        return <PartesAnclaExercise />;
       default:
         return (
           <div className="bg-white rounded-lg shadow-lg p-6">

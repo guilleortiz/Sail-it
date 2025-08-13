@@ -6,7 +6,10 @@ import {
   RudderIcon, 
   ShipIcon, 
   KnotIcon,
-  MotorIcon
+  MotorIcon,
+  BoatEngineIcon,
+  PropellerIcon,
+  AnchorIcon // nuevo ícono
 } from './IconComponents';
 
 const TopicGrid = () => {
@@ -31,6 +34,33 @@ const TopicGrid = () => {
       title: 'Rumbos', 
       description: 'Nombre de los rumbos según el viento.',
       href: '/exercise?topic=rumbos'
+    },
+    // Card de partes del motor
+    {
+      id: 'motor-partes',
+      icon: BoatEngineIcon,
+      title: 'Partes del motor',
+      description: 'Arrastra el nombre de la parte del motor a la posición correcta en la imagen.',
+      href: '/exercise?topic=partes-del-motor',
+      isNew: true
+    },
+    // Card de partes de la hélice
+    {
+      id: 'propeller-partes',
+      icon: PropellerIcon,
+      title: 'Partes de la hélice',
+      description: 'Arrastra el nombre de la parte de la hélice a la posición correcta en la imagen.',
+      href: '/exercise?topic=partes-de-la-helice',
+      isNew: true
+    },
+    // Nueva card en cuarta posición
+    {
+      id: 'anchor-partes',
+      icon: AnchorIcon,
+      title: 'Partes del ancla',
+      description: 'Arrastra el nombre de la parte del ancla a la posición correcta en la imagen.',
+      href: '/exercise?topic=partes-del-ancla',
+      isNew: true
     },
     { 
       id: '6', 
