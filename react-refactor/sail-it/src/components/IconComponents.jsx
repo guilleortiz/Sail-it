@@ -128,3 +128,33 @@ export const PropellerIcon = ({ className = "w-16 h-16 mb-4" }) => (
 export const AnchorIcon = ({ className = "w-16 h-16 mb-4" }) => (
   <img src="/assets/anchor.png" alt="Ancla" className={className} />
 ); 
+
+// Icono de dimensiones del buque (nuevo)
+export const DimensionsIcon = ({ className = "w-16 h-16 text-sky-600 mb-4" }) => (
+  <svg 
+    className={className}
+    viewBox="0 0 64 64" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2.5" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    {/* Contorno del barco */}
+    <path d="M8 40 L56 40" />
+    <path d="M16 40 L16 24 L48 24 L48 40" />
+    <path d="M32 24 L32 16" />
+    <path d="M24 40 L24 48 L40 48 L40 40" />
+    
+    {/* Líneas de dimensiones */}
+    <line x1="32" y1="12" x2="32" y2="48" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3,2"/>
+    <line x1="12" y1="32" x2="52" y2="32" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3,2"/>
+    
+    {/* Marcadores de dimensiones */}
+    <circle cx="32" cy="14" r="2" fill="currentColor"/>
+    <circle cx="32" cy="46" r="2" fill="currentColor"/>
+    <circle cx="14" cy="32" r="2" fill="currentColor"/>
+    <circle cx="50" cy="32" r="2" fill="currentColor"/>
+  </svg>
+); 
