@@ -10,7 +10,8 @@ import {
   BoatEngineIcon,
   PropellerIcon,
   AnchorIcon,
-  DimensionsIcon
+  DimensionsIcon,
+  JarciaFirmeIcon
 } from './IconComponents';
 
 const TopicGrid = () => {
@@ -42,8 +43,7 @@ const TopicGrid = () => {
       icon: BoatEngineIcon,
       title: 'Partes del motor',
       description: 'Arrastra el nombre de la parte del motor a la posición correcta en la imagen.',
-      href: '/exercise?topic=partes-del-motor',
-      isNew: true
+      href: '/exercise?topic=partes-del-motor'
     },
     // Card de partes de la hélice
     {
@@ -51,8 +51,7 @@ const TopicGrid = () => {
       icon: PropellerIcon,
       title: 'Partes de la hélice',
       description: 'Arrastra el nombre de la parte de la hélice a la posición correcta en la imagen.',
-      href: '/exercise?topic=partes-de-la-helice',
-      isNew: true
+      href: '/exercise?topic=partes-de-la-helice'
     },
     // Nueva card en cuarta posición
     {
@@ -60,8 +59,7 @@ const TopicGrid = () => {
       icon: AnchorIcon,
       title: 'Partes del ancla',
       description: 'Arrastra el nombre de la parte del ancla a la posición correcta en la imagen.',
-      href: '/exercise?topic=partes-del-ancla',
-      isNew: true
+      href: '/exercise?topic=partes-del-ancla'
     },
     // Card de dimensiones del buque
     {
@@ -72,13 +70,21 @@ const TopicGrid = () => {
       href: '/exercise?topic=dimensiones-del-buque',
       isNew: true
     },
+    // Card de jarcia firme
+    {
+      id: 'jarcia-firme',
+      icon: JarciaFirmeIcon,
+      title: 'Jarcia Firme',
+      description: 'Arrastra el nombre de la parte de la jarcia firme a la posición correcta en la imagen.',
+      href: '/exercise?topic=jarcia-firme',
+      isNew: true
+    },
     { 
       id: '6', 
       icon: MotorIcon, 
       title: 'Tipos de Motor', 
       description: 'Clasifica las características de motores a 2 tiempos y motores a 4 tiempos.',
-      href: '/exercise?topic=tipos-de-motor',
-      isNew: true
+      href: '/exercise?topic=tipos-de-motor'
     },
     { 
       id: '2', 
