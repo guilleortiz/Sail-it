@@ -10,6 +10,7 @@ import TiposMotorExercise from '../components/exercises/TiposMotorExercise';
 import PartesMotorExercise from '../components/exercises/PartesMotorExercise';
 import PartesHeliceExercise from '../components/exercises/PartesHeliceExercise';
 import PartesAnclaExercise from '../components/exercises/PartesAnclaExercise';
+import DimensionesBuqueExercise from '../components/exercises/DimensionesBuqueExercise';
 
 const ExercisePage = () => {
   const [searchParams] = useSearchParams();
@@ -52,6 +53,8 @@ const ExercisePage = () => {
         return <PartesHeliceExercise />;
       case 'partes-del-ancla':
         return <PartesAnclaExercise />;
+      case 'dimensiones-del-buque':
+        return <DimensionesBuqueExercise />;
       default:
         return (
           <div className="bg-white rounded-lg shadow-lg p-6">

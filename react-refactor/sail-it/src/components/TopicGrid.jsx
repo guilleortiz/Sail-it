@@ -9,7 +9,8 @@ import {
   MotorIcon,
   BoatEngineIcon,
   PropellerIcon,
-  AnchorIcon // nuevo ícono
+  AnchorIcon,
+  DimensionsIcon
 } from './IconComponents';
 
 const TopicGrid = () => {
@@ -60,6 +61,15 @@ const TopicGrid = () => {
       title: 'Partes del ancla',
       description: 'Arrastra el nombre de la parte del ancla a la posición correcta en la imagen.',
       href: '/exercise?topic=partes-del-ancla',
+      isNew: true
+    },
+    // Card de dimensiones del buque
+    {
+      id: 'dimensiones-buque',
+      icon: DimensionsIcon,
+      title: 'Dimensiones del Buque',
+      description: 'Arrastra el nombre de la dimensión del buque a la posición correcta en la imagen.',
+      href: '/exercise?topic=dimensiones-del-buque',
       isNew: true
     },
     { 
