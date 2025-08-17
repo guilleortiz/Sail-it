@@ -1,6 +1,6 @@
 // Define el nombre de la caché. Es una buena práctica cambiar este nombre
 // cada vez que subes una nueva versión de la web para forzar la actualización.
-const CACHE_NAME = 'sailing-navigation-v9';
+const CACHE_NAME = 'sailing-navigation-v10';
 
 const urlsToCache = [
   '/',
