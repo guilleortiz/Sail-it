@@ -157,4 +157,58 @@ export const DimensionsIcon = ({ className = "w-16 h-16 text-sky-600 mb-4" }) =>
     <circle cx="14" cy="32" r="2" fill="currentColor"/>
     <circle cx="50" cy="32" r="2" fill="currentColor"/>
   </svg>
+);
+
+// Icono de jarcia firme (nuevo)
+export const JarciaFirmeIcon = ({ className = "w-16 h-16 text-sky-600 mb-4" }) => (
+  <svg 
+    className={className}
+    viewBox="0 0 64 64" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    {/* Palo mayor */}
+    <line x1="32" y1="8" x2="32" y2="56" stroke="currentColor" strokeWidth="3"/>
+    
+    {/* Cruceta */}
+    <line x1="18" y1="24" x2="46" y2="24" stroke="currentColor" strokeWidth="2.5"/>
+    
+    {/* Estay proel (izquierda) */}
+    <line x1="32" y1="16" x2="12" y2="36" stroke="currentColor" strokeWidth="1.5"/>
+    
+    {/* Estay de popel (derecha) */}
+    <line x1="32" y1="16" x2="52" y2="36" stroke="currentColor" strokeWidth="1.5"/>
+    
+    {/* Obenques altos */}
+    <line x1="18" y1="24" x2="8" y2="40" stroke="currentColor" strokeWidth="1.5"/>
+    <line x1="46" y1="24" x2="56" y2="40" stroke="currentColor" strokeWidth="1.5"/>
+    
+    {/* Obenques bajos */}
+    <line x1="18" y1="24" x2="12" y2="48" stroke="currentColor" strokeWidth="1.5"/>
+    <line x1="46" y1="24" x2="52" y2="48" stroke="currentColor" strokeWidth="1.5"/>
+    
+    {/* Botavara */}
+    <line x1="32" y1="48" x2="56" y2="48" stroke="currentColor" strokeWidth="2.5"/>
+    
+    {/* Amantillo */}
+    <line x1="32" y1="8" x2="32" y2="2" stroke="currentColor" strokeWidth="1.5"/>
+    
+    {/* Pinzote */}
+    <circle cx="32" cy="52" r="2" fill="currentColor"/>
+    
+    {/* Burdas */}
+    <line x1="32" y1="40" x2="20" y2="52" stroke="currentColor" strokeWidth="1.5"/>
+    <line x1="32" y1="40" x2="44" y2="52" stroke="currentColor" strokeWidth="1.5"/>
+    
+    {/* Detalles del palo */}
+    <line x1="30" y1="12" x2="34" y2="12" stroke="currentColor" strokeWidth="1"/>
+    <line x1="30" y1="20" x2="34" y2="20" stroke="currentColor" strokeWidth="1"/>
+    <line x1="30" y1="28" x2="34" y2="28" stroke="currentColor" strokeWidth="1"/>
+    <line x1="30" y1="36" x2="34" y2="36" stroke="currentColor" strokeWidth="1"/>
+    <line x1="30" y1="44" x2="34" y2="44" stroke="currentColor" strokeWidth="1"/>
+  </svg>
 ); 
